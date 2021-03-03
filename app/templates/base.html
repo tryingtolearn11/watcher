@@ -1,13 +1,14 @@
 <html>
     <head>
 
-
-        <title>WATCHER</title>
+        <title>{{ title }}</title>
     </head>
 
     <body>
-
-
+        <div>
+            <a href="/home">Home</a>
+            <a href="{{ url_for('login') }}">Login</a>
+        </div>
     {% block content %} {% endblock %}
     </body>
 </html>
