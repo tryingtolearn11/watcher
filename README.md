@@ -3,7 +3,7 @@
 
 
 <div>
-<p>TODO:</p>
+<h3>TODO:</h3>
 <li>FINISH LOGIN BACKEND</li>
 <li>USER REGISTRATION</li>
 <li>COINGECKO API</li>
