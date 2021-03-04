@@ -1,0 +1,15 @@
+<html>
+    <head>
+        <title> {{ title }} - TEST</title>
+    </head>
+
+    <div>
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('login') }}">Login</a>
+    </div>
+
+
+
+
+    {% block content %} {% endblock %}
+</html>
