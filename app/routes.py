@@ -20,3 +20,12 @@ def login():
     form=LoginForm()
     return render_template("login.html", title="Login", form=form)
 
+
+
+
+
+
+
+@app.route('/news')
+def news():
+    return redirect(url_for('index'))
