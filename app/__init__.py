@@ -12,4 +12,4 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.sqlite3'
 
 db = SQLAlchemy(app)
 
-from app import routes
+from app import routes, coin
