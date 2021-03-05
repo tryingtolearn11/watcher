@@ -24,6 +24,10 @@ def login():
 
 
 
+@app.route('/coins')
+def coins():
+    return render_template("coin.html", title="Coins")
+
 
 
 @app.route('/news')
