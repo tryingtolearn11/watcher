@@ -1,6 +1,7 @@
 from app import app
 from app.forms import LoginForm
 from flask import render_template, redirect, url_for
+from pycoingecko import CoinGeckoAPI
 
 
 @app.route('/')
@@ -23,10 +24,13 @@ def login():
 
 
 
-
+cg = CoinGeckoAPI()
 @app.route('/coins')
 def coins():
-    return render_template("coin.html", title="Coins")
+    data = cg.get_price(ids='bitcoin, litecoin, ethereum',
+                        vs_currencies='usd,eur')
+    print(data)
+    return render_template("coin.html", title="Coins", data=data)
 
 
 
