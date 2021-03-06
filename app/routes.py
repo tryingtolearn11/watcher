@@ -30,19 +30,16 @@ def login():
 @app.route('/coins')
 def coins():
     printer = pprint.PrettyPrinter()
+    coin_id = cg.get_coins_list()
     # Test data
-    data = cg.get_price(ids='bitcoin, litecoin, ethereum',vs_currencies='usd,eur')
-    
+    # data = cg.get_price(ids='bitcoin, litecoin, ethereum',vs_currencies='usd,eur')
 
     # Coin ids
-    coin_id = cg.get_coins_list()
 
-    coin_names = [i.get('name') for i in coin_id]
-    data = coin_names
-    
+    # coin_names = [i.get('id') for i in coin_id]
+    data = cg.get_coins_markets(vs_currency='usd')
+    printer.pprint(data)
 
-
-    test22 = cg.get_price(ids='0-5x-long-okb-token', vs_currencies='usd')
     return render_template("coin.html", title="Coins", data=data)
 
 
