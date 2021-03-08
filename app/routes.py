@@ -37,10 +37,13 @@ def coins():
 
     # Coin ids
 
-    # coin_names = [i.get('id') for i in coin_id]
     data = cg.get_coins_markets(vs_currency='usd')
-    printer.pprint(data)
-    
+    # printer.pprint(data)
+    for d in data:
+        category = d.keys()
+       # printer.pprint(category)
+        for cate in category:
+            print('Category:', cate)
 
     return render_template("coin.html", title="Coins", data=data)
 
