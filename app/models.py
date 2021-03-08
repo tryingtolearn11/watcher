@@ -1,5 +1,5 @@
 from app import db
-
+from datetime import datetime
 
 
 
@@ -17,13 +17,13 @@ class User(db.Model):
 
 
 
-
+# Coin Database Model
 class Coin(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
     current_price = db.Column(db.Float)
     market_cap = db.Column(db.Integer)
-
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
     def __repr__(self):
-        return '<Coin {}, Price {} Market Cap {}>,'.format(self.name,self.current_price, self.market_cap)
+        return '<Coin {}, Price {}, Market Cap {}, Time {}>,'.format(self.name,self.current_price, self.market_cap, self.timestamp)
