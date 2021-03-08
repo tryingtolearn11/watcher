@@ -3,8 +3,8 @@
 
 {% block content %}
     <h>This is coin page</p>
-    {% for d in data %}
-    <div><p> {{ d }} currently at : <b>{{data[d]}}</b></p></div>
+    {% for key in res %}
+    <div><p> {{ key.name }} currently at:{{ key.market_cap_rank }}</p></div>
     {% endfor %}
 
 

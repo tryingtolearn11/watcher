@@ -39,14 +39,15 @@ def coins():
    
     data = cg.get_coins_markets(vs_currency='usd')
    # printer.pprint(data)
-    
 
+
+
+    # Parse and sort for rank by market cap
+    res = []
     for d in data:
-        res = {k: d[k] for k in d.keys() and {'name','market_cap_rank'}}
-        print(str(res))
-
-       # for category in categories:
-            #print('CATEGORY:', category)
+        rank = {k: d[k] for k in d.keys() and {'name','market_cap_rank'}}
+        res.append(rank)
+    print(res) 
 
 
 
@@ -55,7 +56,7 @@ def coins():
 
 
 
-    return render_template("coin.html", title="Coins", data=data)
+    return render_template("coin.html", title="Coins",res=res)
 
 
 
