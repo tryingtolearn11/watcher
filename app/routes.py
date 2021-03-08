@@ -42,10 +42,8 @@ def coins():
     
 
     for d in data:
-        #printer.pprint(d)
-        categories = d.keys()
-        for key,value in d.items():
-            print("Key : {}, Value : {}".format(key, value))
+        res = {k: d[k] for k in d.keys() and {'name','market_cap_rank'}}
+        print(str(res))
 
        # for category in categories:
             #print('CATEGORY:', category)
