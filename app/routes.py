@@ -38,11 +38,15 @@ def coins():
 
    
     data = cg.get_coins_markets(vs_currency='usd')
-    printer.pprint(data)
+   # printer.pprint(data)
     
 
     for d in data:
+        #printer.pprint(d)
         categories = d.keys()
+        for key,value in d.items():
+            print("Key : {}, Value : {}".format(key, value))
+
        # for category in categories:
             #print('CATEGORY:', category)
 
