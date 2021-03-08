@@ -3,7 +3,6 @@ from app.forms import LoginForm
 from flask import render_template, redirect, url_for
 from pycoingecko import CoinGeckoAPI
 import pprint
-import json
 
 # pycoingecko
 cg = CoinGeckoAPI()
@@ -37,13 +36,22 @@ def coins():
 
     # Coin ids
 
+   
     data = cg.get_coins_markets(vs_currency='usd')
-    # printer.pprint(data)
+    printer.pprint(data)
+    
+
     for d in data:
-        category = d.keys()
-       # printer.pprint(category)
-        for cate in category:
-            print('Category:', cate)
+        categories = d.keys()
+       # for category in categories:
+            #print('CATEGORY:', category)
+
+
+
+
+
+
+
 
     return render_template("coin.html", title="Coins", data=data)
 
