@@ -1,4 +1,5 @@
 from app import app
+from app.models import Coin
 from app.forms import LoginForm
 from flask import render_template, redirect, url_for
 from pycoingecko import CoinGeckoAPI
@@ -38,16 +39,15 @@ def coins():
 
    
     data = cg.get_coins_markets(vs_currency='usd')
-   # printer.pprint(data)
+    #printer.pprint(data)
 
 
 
     # Parse and sort for rank by market cap
     res = []
     for d in data:
-        rank = {k: d[k] for k in d.keys() and {'name','market_cap_rank'}}
+        rank = {k: d[k] for k in d.keys() and {'name','current_price','market_cap_rank','market_cap'}}
         res.append(rank)
-    print(res) 
 
 
 

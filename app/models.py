@@ -22,7 +22,8 @@ class Coin(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
     current_price = db.Column(db.Float)
-    market_cap = db.Column(db.Integer)
+    market_cap = db.Column(db.String(180))
+    market_cap_rank = db.Column(db.Integer, unique=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
     def __repr__(self):

@@ -4,7 +4,8 @@
 {% block content %}
     <h>This is coin page</p>
     {% for key in res %}
-    <div><p> {{ key.name }} currently at:{{ key.market_cap_rank }}</p></div>
+    <div><p>{{ key.market_cap_rank }}|{{ key.name }} currently at : {{
+        key.current_price }} | Market Cap: {{key.market_cap}} </p></div>
     {% endfor %}
 
 
