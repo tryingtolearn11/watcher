@@ -30,25 +30,15 @@ def login():
 
 @app.route('/coins')
 def coins():
-    printer = pprint.PrettyPrinter()
-    coin_id = cg.get_coins_list()
-    # Test data
-    # data = cg.get_price(ids='bitcoin, litecoin, ethereum',vs_currencies='usd,eur')
-
-    # Coin ids
-
-   
     data = cg.get_coins_markets(vs_currency='usd')
-#     printer.pprint(data)
-
-
-
+    # printer.pprint(data) 
     # Parse and sort for rank by market cap
     res = []
     for d in data:
         rank = {k: d[k] for k in d.keys() and {'symbol','price_change_24h','name','current_price','market_cap_rank','market_cap'}}
         res.append(rank)
-
+    
+    # TODO: Store data in res[] to db 
 
 
 
