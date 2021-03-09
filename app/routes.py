@@ -39,14 +39,14 @@ def coins():
 
    
     data = cg.get_coins_markets(vs_currency='usd')
-    #printer.pprint(data)
+#     printer.pprint(data)
 
 
 
     # Parse and sort for rank by market cap
     res = []
     for d in data:
-        rank = {k: d[k] for k in d.keys() and {'name','current_price','market_cap_rank','market_cap'}}
+        rank = {k: d[k] for k in d.keys() and {'symbol','price_change_24h','name','current_price','market_cap_rank','market_cap'}}
         res.append(rank)
 
 

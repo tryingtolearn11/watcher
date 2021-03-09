@@ -4,11 +4,14 @@
 {% block content %}
 <h2>This is coin page</h2></p>
     
-<table style="width:20%">
+<table style="width:70%">
     <thead>
         <tr>
+            <th> Coin </th>
+            <th>    </th>
             <th> Rank </th>
             <th> Current Price </th>
+            <th> Price Change 24h </th>
             <th> Market Cap </th>
         </tr>
     </thead>
@@ -16,8 +19,11 @@
 
         {% for k in res %}
         <tr key = {{k.name}}></td>
+            <td>{{  k.name }}</td>
+            <td>{{  k.symbol }}</td>
             <td>{{  k.market_cap_rank }}</td>
             <td>{{  k.current_price   }}</td>
+            <td>{{  k.price_change_24h}}</td>
             <td>{{  k.market_cap   }}</td>
         {% endfor %}
         </tr>
