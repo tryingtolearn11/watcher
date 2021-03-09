@@ -2,11 +2,48 @@
 
 
 {% block content %}
-    <h>This is coin page</p>
-    {% for key in res %}
-    <div><p>{{ key.market_cap_rank }}|{{ key.name }} currently at : {{
-        key.current_price }} | Market Cap: {{key.market_cap}} </p></div>
-    {% endfor %}
+<h2>This is coin page</h2></p>
+    
+<table style="width:20%">
+    <thead>
+        <tr>
+            <th> Rank </th>
+            <th> Current Price </th>
+            <th> Market Cap </th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for k in res %}
+        <tr key = {{k.name}}></td>
+            <td>{{  k.market_cap_rank }}</td>
+            <td>{{  k.current_price   }}</td>
+            <td>{{  k.market_cap   }}</td>
+        {% endfor %}
+        </tr>
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
