@@ -24,7 +24,7 @@ class Coin(db.Model):
     symbol = db.Column(db.String(32), unique=True)
     current_price = db.Column(db.Float)
     market_cap = db.Column(db.String(180))
-    market_cap_rank = db.Column(db.Integer, unique=True)
+    market_cap_rank = db.Column(db.Integer)
     price_change_24h = db.Column(db.Float)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     
