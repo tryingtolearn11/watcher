@@ -27,6 +27,18 @@ class Coin(db.Model):
     market_cap_rank = db.Column(db.Integer, unique=True)
     price_change_24h = db.Column(db.Float)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    
 
+    def __init__(self, name, symbol, current_price, market_cap_rank,
+                 market_cap, price_change_24h):
+        self.name = name
+        self.symbol = symbol
+        self.current_price = current_price
+        self.market_cap_rank = market_cap_rank
+        self.market_cap = market_cap
+        self.price_change_24h = price_change_24h 
     def __repr__(self):
-        return '<Coin {}, Price {}, Market Cap {}, Time {}>,'.format(self.name,self.current_price, self.market_cap, self.timestamp)
+        return '<Coin {}, Symbol {}, Price {}>'.format(self.name, self.symbol,
+                                                       self.current_price)
+       # return '<Coin {}, Price {}, Market Cap {}, Time
+       # {}>,'.format(self.name,self.current_price, self.market_cap, self.#timestamp)
