@@ -8,13 +8,14 @@ import pprint
 
 # TODO: TAKE THE DATA FROM DB AND CONNECT IT TO coins()
 # TODO: FIX PIPELINE TO DB IT DOES NOT UPDATE THE DB COLOUMNS
-@scheduler.task('interval', id='do_job_1', seconds=10)
+@scheduler.task('interval', id='do_job_1', seconds=1110)
 def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB DONE")
         # Get a request from api
+        printer = pprint.PrettyPrinter()
         data = cg.get_coins_markets(vs_currency='usd')
-        
+        #printer.pprint(data) 
         res = []
         for d in data:
             rank = {k: d[k] for k in d.keys() and {'symbol','price_change_24h','name',
@@ -30,7 +31,6 @@ def job1():
             # Find if coin already exists in db
             new_coin = Coin.query.filter_by(name=res[i].get('name')).first() 
             # If not then we add it to db
-            print(new_coin.current_price)
             if new_coin is None:
                 new_coin = Coin(res[i].get('name'), res[i].get('symbol'),
                                 res[i].get('current_price'),
@@ -39,8 +39,10 @@ def job1():
                 db.session.add(new_coin)
                 db.session.commit()
             else:
+                #print(new_coin.name, new_coin.current_price)
                 # TODO: NEED TO UPDATE THE DB ROWS THAT ALREADY EXISTS!
                 # db.session.merge(new_coin)
+                setattr(new_coin, "current_price", new_coin.current_price) 
                 
                 db.session.commit()
         
