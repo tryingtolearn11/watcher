@@ -8,7 +8,7 @@ import pprint
 
 # TODO: TAKE THE DATA FROM DB AND CONNECT IT TO coins()
 # TODO: FIX PIPELINE TO DB IT DOES NOT UPDATE THE DB COLOUMNS
-@scheduler.task('interval', id='do_job_1', seconds=30)
+@scheduler.task('interval', id='do_job_1', seconds=60)
 def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB DONE")

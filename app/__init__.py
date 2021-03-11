@@ -5,7 +5,7 @@ from config import Config
 from pycoingecko import CoinGeckoAPI 
 from sqlalchemy import MetaData
 from flask_apscheduler import APScheduler 
-
+from flask_bootstrap import Bootstrap
 
 
 app = Flask(__name__)
@@ -17,6 +17,7 @@ scheduler = APScheduler()
 cg = CoinGeckoAPI()
 db = SQLAlchemy(app)
 migrate = Migrate(app, db, render_as_batch=True)
+bootstrap = Bootstrap(app)
 naming_convention = {
         "ix": 'ix_%(column_0_label)s',
         "uq": "uq_%(table_name)s_%(column_0_name)s",
