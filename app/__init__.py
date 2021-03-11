@@ -4,10 +4,16 @@ from flask_migrate import Migrate
 from config import Config
 from pycoingecko import CoinGeckoAPI 
 from sqlalchemy import MetaData
+from flask_apscheduler import APScheduler 
+
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
+app.config.from_object(Config)
 
+
+scheduler = APScheduler()
 cg = CoinGeckoAPI()
 db = SQLAlchemy(app)
 migrate = Migrate(app, db, render_as_batch=True)
@@ -20,6 +26,8 @@ naming_convention = {
 }
 db = SQLAlchemy(metadata=MetaData(naming_convention=naming_convention))
 
+scheduler.init_app(app)
+scheduler.start()
 
 with app.app_context():
     if db.engine.url.drivername == 'sqlite':
