@@ -7,7 +7,6 @@ import pprint
 
 
 # TODO: TAKE THE DATA FROM DB AND CONNECT IT TO coins()
-res = []
 @scheduler.task('interval', id='do_job_1', seconds=60)
 def job1():
     with scheduler.app.app_context():
@@ -15,7 +14,7 @@ def job1():
         # Get a request from api
         data = cg.get_coins_markets(vs_currency='usd')
         
-       #  res = []
+        res = []
         for d in data:
             rank = {k: d[k] for k in d.keys() and {'symbol','price_change_24h','name',
                                                'current_price','market_cap_rank','market_cap'}}  
@@ -39,7 +38,6 @@ def job1():
                 db.session.commit()
             else:
                 db.session.merge(new_coin)
-    return res
         
 
 # pycoingecko
@@ -63,26 +61,24 @@ def login():
     return render_template("login.html", title="Login", form=form)
 
 
-# FOR COMPARISON PURPOSES: btc : current price : 55784 
+# FOR COMPARISON PURPOSES: btc : current price : 56694 
 
 @app.route('/coins')
 def coins():
+    all_coins = Coin.query.all()
+
     '''
     printer = pprint.PrettyPrinter()
     # data = cg.get_coins_markets(vs_currency='usd')
     # printer.pprint(data) 
     # Parse and sort for rank by market cap
     # res = []
-    
     for d in data:
         rank = {k: d[k] for k in d.keys() and {'symbol','price_change_24h','name',
                                                'current_price','market_cap_rank','market_cap'}}  
         res.append(rank)
-    
     keys = list(res[0].keys())
     print(keys)
-
-
     # TODO: Store data in res[] to db | UPDATE: SOLVED FOR NOW I THINK
     for i in range(len(res)):
         # Find if coin already exists in db
@@ -100,7 +96,7 @@ def coins():
     '''
 
 
-    return render_template("coin.html", title="Coins",res=res)
+    return render_template("coin.html", title="Coins",all_coins=all_coins)
 
 
 
