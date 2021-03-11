@@ -3,6 +3,15 @@
 
 {% block content %}
 <h2>This is coin page</h2></p>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul>
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
 <table style="width:50%">
     <thead>
         <tr>
