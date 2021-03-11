@@ -6,10 +6,11 @@ from pycoingecko import CoinGeckoAPI
 import pprint
 
 
-@scheduler.task('interval', id='do_job_1', seconds=300)
+@scheduler.task('interval', id='do_job_1', seconds=60)
 def job1():
-    flash('JOB 1 DONE AT {}'.format(seconds))
-    print('Job 1 executed')
+    with scheduler.app.app_context():
+        print("INTERVAL JOB DONE")
+
 
 
 # pycoingecko
@@ -51,7 +52,7 @@ def coins():
     print(keys)
 
 
-    # TODO: Store data in res[] to db
+    # TODO: Store data in res[] to db | UPDATE: SOLVED FOR NOW I THINK
     for i in range(len(res)):
         # Find if coin already exists in db
         new_coin = Coin.query.filter_by(name=res[i].get('name')).first() 
