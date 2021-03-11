@@ -8,7 +8,7 @@ import pprint
 
 # TODO: TAKE THE DATA FROM DB AND CONNECT IT TO coins()
 # TODO: FIX PIPELINE TO DB IT DOES NOT UPDATE THE DB COLOUMNS
-@scheduler.task('interval', id='do_job_1', seconds=60)
+@scheduler.task('interval', id='do_job_1', seconds=10)
 def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB DONE")
@@ -30,6 +30,7 @@ def job1():
             # Find if coin already exists in db
             new_coin = Coin.query.filter_by(name=res[i].get('name')).first() 
             # If not then we add it to db
+            print(new_coin.current_price)
             if new_coin is None:
                 new_coin = Coin(res[i].get('name'), res[i].get('symbol'),
                                 res[i].get('current_price'),
@@ -40,6 +41,7 @@ def job1():
             else:
                 # TODO: NEED TO UPDATE THE DB ROWS THAT ALREADY EXISTS!
                 # db.session.merge(new_coin)
+                
                 db.session.commit()
         
 
