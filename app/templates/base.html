@@ -3,20 +3,28 @@
 
 <html>
     <head>
+        <link href="static/bootstrap.min.css" rel="stylesheet" type="text/css">
         <title> {{ title }} - TEST</title>
     </head>
-
-    <div>
-        <a href="{{ url_for('index') }}">Home</a>
-
-        <a href="{{ url_for('login') }}">Login</a>
-    
-        <a href="{{ url_for('coins') }}">Coins</a>
-        <a href="{{ url_for('news') }}">News</a>
-    </div>
-
-
-
+{% block navbar %}
+    <nav class ="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="{{ url_for('index') }}">Home</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                                                     data-target="#navbarNavAltMarkup"
+                                                     aria-controls="navbarNavAltMarkup"
+                                                     aria-expanded="false"
+                                                     aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
+                <a class="nav-item nav-link" href="{{ url_for('coins') }}">Coins</a>
+                <a class="nav-item nav-link" href="{{ url_for('news') }}">News</a>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
 
     {% block content %} {% endblock %}
 </html>
