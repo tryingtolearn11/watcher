@@ -8,7 +8,7 @@ import pprint
 
 # TODO: TAKE THE DATA FROM DB AND CONNECT IT TO coins()
 # TODO: FIX PIPELINE TO DB IT DOES NOT UPDATE THE DB COLOUMNS
-@scheduler.task('interval', id='do_job_1', seconds=1110)
+@scheduler.task('interval', id='do_job_1', seconds=20)
 def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB DONE")
@@ -39,11 +39,10 @@ def job1():
                 db.session.add(new_coin)
                 db.session.commit()
             else:
-                #print(new_coin.name, new_coin.current_price)
+                print(new_coin.name, new_coin.current_price)
                 # TODO: NEED TO UPDATE THE DB ROWS THAT ALREADY EXISTS!
                 # db.session.merge(new_coin)
-                setattr(new_coin, "current_price", new_coin.current_price) 
-                
+                setattr(new_coin, 'current_price', res[i].get('current_price')) 
                 db.session.commit()
         
 
@@ -75,6 +74,8 @@ def coins():
     all_coins = Coin.query.all()
     data = cg.get_price(ids='bitcoin',vs_currencies='usd')
     print(data)
+    bit = Coin.query.first()
+    print(bit)
     '''
     printer = pprint.PrettyPrinter()
     # data = cg.get_coins_markets(vs_currency='usd')
