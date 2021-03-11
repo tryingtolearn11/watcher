@@ -33,7 +33,7 @@ def login():
     return render_template("login.html", title="Login", form=form)
 
 
-
+# FOR COMPARISON PURPOSES: btc : current price : 56095 
 
 @app.route('/coins')
 def coins():
@@ -54,7 +54,7 @@ def coins():
     # TODO: Store data in res[] to db
     for i in range(len(res)):
         # Find if coin already exists in db
-        new_coin = Coin.query.filter_by(username=res[i].get('name')).first() 
+        new_coin = Coin.query.filter_by(name=res[i].get('name')).first() 
         # If not then we add it to db
         if new_coin is None:
             new_coin = Coin(res[i].get('name'), res[i].get('symbol'),
@@ -64,7 +64,7 @@ def coins():
             db.session.add(new_coin)
             db.session.commit()
         else:
-            db.session.merge()
+            db.session.merge(new_coin)
         
  
 
