@@ -5,8 +5,8 @@ from flask import render_template, redirect, url_for, flash
 from pycoingecko import CoinGeckoAPI
 import pprint
 
-
-@scheduler.task('interval', id='do_job_1', seconds=30)
+# QUERIES AT EVERY INTERVAL
+@scheduler.task('interval', id='do_job_1', seconds=300)
 def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB DONE")
