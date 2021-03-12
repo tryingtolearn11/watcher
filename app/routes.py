@@ -7,7 +7,7 @@ from pycoingecko import CoinGeckoAPI
 import pprint
 
 # QUERIES AT EVERY INTERVAL
-@scheduler.task('interval', id='do_job_1', seconds=30)
+@scheduler.task('interval', id='do_job_1', seconds=10)
 def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB DONE")
@@ -23,7 +23,7 @@ def job1():
     
         keys = list(res[0].keys())
         # print(keys)
-
+        '''
         # Rid of our current data
         coins = Coin.query.all()
         for coin in coins:
@@ -31,12 +31,17 @@ def job1():
         db.session.commit()
 
         # Add new data
-        for i in len(res):
+        for i in range(len(res)):
+            # Create a new Coin and add to db
+            res[i] = Coin(res[i].get('name'), res[i].get('symbol'),
+                          res[i].get('current_price'), res[i].get('market_cap_rank'),
+                          res[i].get('market_cap'),  res[i].get('price_change_24h'))
             db.session.add(res[i])
             db.session.commit()
-            
 
             '''
+        # TODO: RANK BUG: DUPLICATE RANKS 
+        for i in range(len(res)):
             # Find if coin already exists in db
             new_coin = Coin.query.filter_by(name=res[i].get('name')).first() 
             # If not then we add it to db
@@ -60,7 +65,6 @@ def job1():
                 setattr(new_coin, 'market_cap', res[i].get('market_cap'))
 
                 db.session.commit()
-            '''
         
 
 # pycoingecko
