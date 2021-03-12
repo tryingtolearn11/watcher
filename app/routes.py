@@ -8,7 +8,7 @@ import pprint
 from sqlalchemy import desc, asc
 
 # QUERIES AT EVERY INTERVAL
-@scheduler.task('interval', id='do_job_1', seconds=300)
+@scheduler.task('interval', id='do_job_1', seconds=100)
 def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB DONE")
@@ -91,12 +91,10 @@ def register():
 
 @app.route('/coins')
 def coins():
-    
-    # Sort the data before leaderboard
+    # Seems that sorting by time works -for now    
     #all_coins = Coin.query.order_by(Coin.market_cap_rank.asc()).all() 
     #print(len(all_coins))
     all_coins = Coin.query.order_by(asc(Coin.timestamp)).limit(100).all()
-    #print("BY TIME :", all_coins_by_time)
 
 
 
