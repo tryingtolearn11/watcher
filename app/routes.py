@@ -6,7 +6,7 @@ from pycoingecko import CoinGeckoAPI
 import pprint
 
 
-@scheduler.task('interval', id='do_job_1', seconds=300)
+@scheduler.task('interval', id='do_job_1', seconds=30)
 def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB DONE")
@@ -43,7 +43,7 @@ def job1():
                 # I think it works fine now 
                 # UPDATE: TODO: FIX RANKINGS --have to delete old coins or
                 # maybe overwrite them 
-                # TODO: TEST LATER : SEEMS FIND FOR NOW 
+                # TODO: Need to order the rankings OUT OF ORDER!
                 setattr(new_coin, 'name', res[i].get('name')) 
                 setattr(new_coin, 'symbol', res[i].get('symbol')) 
                 setattr(new_coin, 'current_price', res[i].get('current_price')) 
@@ -78,6 +78,7 @@ def login():
 
 @app.route('/coins')
 def coins():
+    # TODO: SORT THE LIST BEFORE SENDING TO CLIENT
     all_coins = Coin.query.all()
     data = cg.get_price(ids='bitcoin',vs_currencies='usd')
     print(data)
