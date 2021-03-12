@@ -79,25 +79,15 @@ def login():
 @app.route('/coins')
 def coins():
     # TODO: SORT THE LIST BEFORE SENDING TO CLIENT
-    all_coins = Coin.query.all()
+    #all_coins = Coin.query.all()
     #data = cg.get_price(ids='bitcoin',vs_currencies='usd')
     #print(data)
     #bit = Coin.query.first()
     #print(bit)
     
     # Sort the data before leaderboard
-    sorted = Coin.query.order_by(Coin.market_cap_rank.asc()).all() 
-    print(sorted)
+    all_coins = Coin.query.order_by(Coin.market_cap_rank.asc()).all() 
     
-
-
-
-
-
-
-
-
-
 
 
 
