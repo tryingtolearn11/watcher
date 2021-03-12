@@ -50,7 +50,7 @@ class Coin(db.Model):
         self.market_cap = market_cap
         self.price_change_24h = price_change_24h 
     def __repr__(self):
-        return '<Coin {}, Symbol {}, Price {}>'.format(self.name, self.symbol,
-                                                       self.current_price)
+        return '<Coin {}, Symbol {}, Price {}, MarketCap Rank {}>'.format(self.name, self.symbol,
+                                                       self.current_price, self.market_cap_rank)
        # return '<Coin {}, Price {}, Market Cap {}, Time
        # {}>,'.format(self.name,self.current_price, self.market_cap, self.#timestamp)

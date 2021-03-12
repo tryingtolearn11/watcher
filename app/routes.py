@@ -58,12 +58,20 @@ def job1():
                 # UPDATE: TODO: FIX RANKINGS --have to delete old coins or
                 # maybe overwrite them 
                 # TODO: Need to order the rankings OUT OF ORDER!
-                setattr(new_coin, 'name', res[i].get('name')) 
-                setattr(new_coin, 'symbol', res[i].get('symbol')) 
-                setattr(new_coin, 'current_price', res[i].get('current_price')) 
-                setattr(new_coin, 'market_cap_rank',res[i].get('market_cap_rank')) 
-                setattr(new_coin, 'market_cap', res[i].get('market_cap'))
-
+                
+                # Here we find coins by their rank
+                test_coin =Coin.query.filter_by(market_cap_rank=res[i].get('market_cap_rank')).first()
+                #print(test_coin)
+                
+                if test_coin.market_cap_rank == res[i].get('market_cap_rank')and test_coin.name != res[i].get('name'):
+                    print(test_coin, res[i].get('name'), res[i].get('market_cap_rank'))
+                '''
+                setattr(test_coin, 'name', res[i].get('name')) 
+                setattr(test_coin, 'symbol', res[i].get('symbol')) 
+                setattr(test_coin, 'current_price', res[i].get('current_price')) 
+                setattr(test_coin, 'market_cap_rank',res[i].get('market_cap_rank')) 
+                setattr(test_coin, 'market_cap', res[i].get('market_cap'))
+                '''
                 db.session.commit()
         
 
@@ -74,13 +82,6 @@ cg = CoinGeckoAPI()
 @app.route('/index')
 def index():
     return render_template("index.html", title="HOME")
-
-
-
-
-
-
-
 
 @app.route('/login', methods=['GET','POST'])
 def login():
@@ -136,10 +137,12 @@ def coins():
     # ISSUE: multiple coins all ranked at 100 at the bottom of list
     # To ensure we only keep the 100 coins in our list
     # I will remove the extra coins. 
+    '''
     while len(all_coins) > 100:
         all_coins.pop()
     print(len(all_coins))
 
+    '''
 
 
 
