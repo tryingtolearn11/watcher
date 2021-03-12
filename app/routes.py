@@ -62,9 +62,13 @@ def job1():
                 # Here we find coins by their rank
                 test_coin =Coin.query.filter_by(market_cap_rank=res[i].get('market_cap_rank')).first()
                 #print(test_coin)
-                
-                if test_coin.market_cap_rank == res[i].get('market_cap_rank')and test_coin.name != res[i].get('name'):
-                    print(test_coin, res[i].get('name'), res[i].get('market_cap_rank'))
+                if test_coin is not None: 
+                    if test_coin.market_cap_rank == res[i].get('market_cap_rank')and test_coin.name != res[i].get('name'):
+                        print(test_coin, res[i].get('name'), res[i].get('market_cap_rank'))
+                        setattr(test_coin, 'market_cap_rank', -1)
+
+                    #if test_coin.market_cap_rank == -1:
+                       # print(test.coin)
                 '''
                 setattr(test_coin, 'name', res[i].get('name')) 
                 setattr(test_coin, 'symbol', res[i].get('symbol')) 
@@ -137,6 +141,9 @@ def coins():
     # ISSUE: multiple coins all ranked at 100 at the bottom of list
     # To ensure we only keep the 100 coins in our list
     # I will remove the extra coins. 
+
+    null_coins = Coin.query.filter_by(market_cap_rank=-1).all()
+    print(null_coins)
     '''
     while len(all_coins) > 100:
         all_coins.pop()
