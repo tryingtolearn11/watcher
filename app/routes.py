@@ -74,7 +74,6 @@ def login():
     return render_template("login.html", title="Login", form=form)
 
 
-# FOR COMPARISON PURPOSES: btc : current price : 56694 
 
 @app.route('/coins')
 def coins():
