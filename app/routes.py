@@ -7,7 +7,7 @@ from pycoingecko import CoinGeckoAPI
 import pprint
 
 # QUERIES AT EVERY INTERVAL
-@scheduler.task('interval', id='do_job_1', seconds=300)
+@scheduler.task('interval', id='do_job_1', seconds=30)
 def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB DONE")
@@ -25,10 +25,16 @@ def job1():
         # print(keys)
 
 
-        # TODO: Store data in res[] to db | UPDATE: SOLVED FOR NOW I THINK
-        for i in range(len(res)):
-            # Find if coin from db exists in our list
+        coins = coins.query.all()
+        for coin in coins:
+            db.session.delete(coin)
+        db.session.commit()
 
+            db.session.add(new_coin)
+            db.session.commit()
+            
+
+            '''
             # Find if coin already exists in db
             new_coin = Coin.query.filter_by(name=res[i].get('name')).first() 
             # If not then we add it to db
@@ -52,6 +58,7 @@ def job1():
                 setattr(new_coin, 'market_cap', res[i].get('market_cap'))
 
                 db.session.commit()
+            '''
         
 
 # pycoingecko
@@ -118,8 +125,14 @@ def coins():
     
     # Sort the data before leaderboard
     all_coins = Coin.query.order_by(Coin.market_cap_rank.asc()).all() 
-    
-
+    print(len(all_coins))
+    # TODO: Come up with a better solution to fix this issue
+    # ISSUE: multiple coins all ranked at 100 at the bottom of list
+    # To ensure we only keep the 100 coins in our list
+    # I will remove the extra coins. 
+    while len(all_coins) > 100:
+        all_coins.pop()
+    print(len(all_coins))
 
 
 
