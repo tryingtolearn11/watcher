@@ -23,60 +23,24 @@ def job1():
     
         keys = list(res[0].keys())
         # print(keys)
-        '''
-        # Rid of our current data
-        coins = Coin.query.all()
-        for coin in coins:
-            db.session.delete(coin)
-        db.session.commit()
 
-        # Add new data
-        for i in range(len(res)):
-            # Create a new Coin and add to db
-            res[i] = Coin(res[i].get('name'), res[i].get('symbol'),
-                          res[i].get('current_price'), res[i].get('market_cap_rank'),
-                          res[i].get('market_cap'),  res[i].get('price_change_24h'))
-            db.session.add(res[i])
-            db.session.commit()
-
-            '''
         # TODO: RANK BUG: DUPLICATE RANKS 
         for i in range(len(res)):
-            # Find if coin already exists in db
             new_coin = Coin.query.filter_by(name=res[i].get('name')).first() 
-            # If not then we add it to db
             if new_coin is None:
                 new_coin = Coin(res[i].get('name'), res[i].get('symbol'),
                                 res[i].get('current_price'),
                                 res[i].get('market_cap_rank'),
                                 res[i].get('market_cap'),  res[i].get('price_change_24h'))
+                print("Added : ", new_coin)
                 db.session.add(new_coin)
                 db.session.commit()
-            else:
-                # print(new_coin.name, new_coin.current_price)
-                # I think it works fine now 
-                # UPDATE: TODO: FIX RANKINGS --have to delete old coins or
-                # maybe overwrite them 
-                # TODO: Need to order the rankings OUT OF ORDER!
-                
-                # Here we find coins by their rank
-                test_coin =Coin.query.filter_by(market_cap_rank=res[i].get('market_cap_rank')).first()
-                #print(test_coin)
-                if test_coin is not None: 
-                    if test_coin.market_cap_rank == res[i].get('market_cap_rank')and test_coin.name != res[i].get('name'):
-                        print(test_coin, res[i].get('name'), res[i].get('market_cap_rank'))
-                        setattr(test_coin, 'market_cap_rank', -1)
 
-                    #if test_coin.market_cap_rank == -1:
-                       # print(test.coin)
-                '''
-                setattr(test_coin, 'name', res[i].get('name')) 
-                setattr(test_coin, 'symbol', res[i].get('symbol')) 
-                setattr(test_coin, 'current_price', res[i].get('current_price')) 
-                setattr(test_coin, 'market_cap_rank',res[i].get('market_cap_rank')) 
-                setattr(test_coin, 'market_cap', res[i].get('market_cap'))
-                '''
-                db.session.commit()
+            else:
+                setattr(new_coin, 'current_price', res[i].get('current_price')) 
+                setattr(new_coin, 'market_cap_rank',res[i].get('market_cap_rank')) 
+                setattr(new_coin, 'market_cap', res[i].get('market_cap'))
+                db.session.commit()     
         
 
 # pycoingecko
@@ -127,12 +91,6 @@ def register():
 
 @app.route('/coins')
 def coins():
-    # TODO: SORT THE LIST BEFORE SENDING TO CLIENT
-    #all_coins = Coin.query.all()
-    #data = cg.get_price(ids='bitcoin',vs_currencies='usd')
-    #print(data)
-    #bit = Coin.query.first()
-    #print(bit)
     
     # Sort the data before leaderboard
     all_coins = Coin.query.order_by(Coin.market_cap_rank.asc()).all() 
@@ -142,14 +100,6 @@ def coins():
     # To ensure we only keep the 100 coins in our list
     # I will remove the extra coins. 
 
-    null_coins = Coin.query.filter_by(market_cap_rank=-1).all()
-    print(null_coins)
-    '''
-    while len(all_coins) > 100:
-        all_coins.pop()
-    print(len(all_coins))
-
-    '''
 
 
 
