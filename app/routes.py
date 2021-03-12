@@ -5,9 +5,10 @@ from flask_login import current_user, login_user, logout_user
 from flask import render_template, redirect, url_for, flash
 from pycoingecko import CoinGeckoAPI
 import pprint
+from sqlalchemy import desc, asc
 
 # QUERIES AT EVERY INTERVAL
-@scheduler.task('interval', id='do_job_1', seconds=10)
+@scheduler.task('interval', id='do_job_1', seconds=300)
 def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB DONE")
@@ -42,10 +43,6 @@ def job1():
                 setattr(new_coin, 'market_cap', res[i].get('market_cap'))
                 db.session.commit()     
         
-
-
-
-
 
 # pycoingecko
 cg = CoinGeckoAPI()
@@ -96,14 +93,10 @@ def register():
 def coins():
     
     # Sort the data before leaderboard
-    all_coins = Coin.query.order_by(Coin.market_cap_rank.asc()).all() 
-    print(len(all_coins))
-    # TODO: Come up with a better solution to fix this issue
-    # ISSUE: multiple coins all ranked at 100 at the bottom of list
-    # To ensure we only keep the 100 coins in our list
-    # I will remove the extra coins. 
-    
-
+    #all_coins = Coin.query.order_by(Coin.market_cap_rank.asc()).all() 
+    #print(len(all_coins))
+    all_coins = Coin.query.order_by(asc(Coin.timestamp)).limit(100).all()
+    #print("BY TIME :", all_coins_by_time)
 
 
 
