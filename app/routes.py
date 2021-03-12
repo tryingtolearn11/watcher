@@ -80,10 +80,31 @@ def login():
 def coins():
     # TODO: SORT THE LIST BEFORE SENDING TO CLIENT
     all_coins = Coin.query.all()
-    data = cg.get_price(ids='bitcoin',vs_currencies='usd')
-    print(data)
-    bit = Coin.query.first()
-    print(bit)
+    #data = cg.get_price(ids='bitcoin',vs_currencies='usd')
+    #print(data)
+    #bit = Coin.query.first()
+    #print(bit)
+    
+    # Sort the data before leaderboard
+    sorted = Coin.query.order_by(Coin.market_cap_rank.asc()).all() 
+    print(sorted)
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     '''
     printer = pprint.PrettyPrinter()
     # data = cg.get_coins_markets(vs_currency='usd')
