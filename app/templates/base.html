@@ -20,11 +20,17 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
-                <a class="nav-item nav-link" href="{{ url_for('coins') }}">Coins</a>
-                <a class="nav-item nav-link" href="{{ url_for('news') }}">News</a>
-            </div>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('login')}}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('coins') }}">Coins</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-item nav-link" href="{{ url_for('news')}}">News</a>
+                </li>
+            </ul>
         </div>
     </nav>
 
