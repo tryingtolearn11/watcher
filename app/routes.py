@@ -24,13 +24,15 @@ def job1():
         keys = list(res[0].keys())
         # print(keys)
 
-
-        coins = coins.query.all()
+        # Rid of our current data
+        coins = Coin.query.all()
         for coin in coins:
             db.session.delete(coin)
         db.session.commit()
 
-            db.session.add(new_coin)
+        # Add new data
+        for i in len(res):
+            db.session.add(res[i])
             db.session.commit()
             
 
