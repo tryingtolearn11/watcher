@@ -9,7 +9,7 @@ import pprint
 from sqlalchemy import desc, asc
 
 # QUERIES AT EVERY INTERVAL
-@scheduler.task('interval', id='do_job_1', seconds=10)
+@scheduler.task('interval', id='do_job_1', seconds=200)
 def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB DONE")
