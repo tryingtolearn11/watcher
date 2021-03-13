@@ -99,8 +99,7 @@ def coins():
     #print(len(all_coins))
     all_coins = Coin.query.order_by(asc(Coin.timestamp)).limit(100).all()
     print(type(all_coins))
-    for i in range(len(all_coins)):
-        print(all_coins[i].market_cap_rank)
+    all_coins.sort(key=lambda x: x.market_cap_rank)
 
     return render_template("coin.html", title="Coins",all_coins=all_coins)
 
