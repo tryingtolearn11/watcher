@@ -15,6 +15,7 @@ app.config.from_object(Config)
 
 
 login = LoginManager(app)
+login.login_view = 'login'
 scheduler = APScheduler()
 cg = CoinGeckoAPI()
 db = SQLAlchemy(app)

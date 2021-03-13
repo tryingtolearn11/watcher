@@ -1,8 +1,9 @@
 from app import app, db, scheduler
 from app.models import Coin, User
 from app.forms import LoginForm, RegistrationForm
-from flask_login import current_user, login_user, logout_user
-from flask import render_template, redirect, url_for, flash
+from flask_login import current_user, login_user, logout_user, login_required
+from flask import render_template, redirect, url_for, flash, request
+from werkzeug.urls import url_parse
 from pycoingecko import CoinGeckoAPI
 import pprint
 from sqlalchemy import desc, asc
@@ -54,7 +55,6 @@ def index():
 
 @app.route('/login', methods=['GET','POST'])
 def login():
-    
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = LoginForm()
@@ -64,7 +64,10 @@ def login():
             flash('Invalid Username or Password')
             return redirect('/login')
         login_user(user, remember = form.remember_me.data)
-        return redirect(url_for('index'))
+        next_page = request.args.get('next')
+        if not next_page or url_parse(next_page).netloc != '':
+            next_page = url_for('index')
+        return redirect(next_page)
     return render_template("login.html", title="Login", form=form)
 
 
@@ -95,8 +98,9 @@ def coins():
     #all_coins = Coin.query.order_by(Coin.market_cap_rank.asc()).all() 
     #print(len(all_coins))
     all_coins = Coin.query.order_by(asc(Coin.timestamp)).limit(100).all()
-
-
+    print(type(all_coins))
+    for i in range(len(all_coins)):
+        print(all_coins[i].market_cap_rank)
 
     return render_template("coin.html", title="Coins",all_coins=all_coins)
 
@@ -109,29 +113,10 @@ def news():
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+@app.route('/profile')
+@login_required
+def profile():
+    return render_template("profile.html",title="Profile")
 
 
 
