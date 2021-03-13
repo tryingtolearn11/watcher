@@ -6,6 +6,8 @@
 <h3>TODO:</h3>
 <li><s>USER REGISTRATION</s></li>
 <li><s>FINISH LOGIN BACKEND</s></li>
+<li>Fix Ranking Bug</li>
+<li>Paginate Ranking Board</li>
 <li>Personalize App: Users can track specific coins</li>
 <li>COINGECKO API (can we add graph ?)</li>
 <li>ADD DASHBOARD</li>
