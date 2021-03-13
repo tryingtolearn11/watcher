@@ -55,6 +55,7 @@ def job1():
                 setattr(new_coin, 'market_cap', res[i].get('market_cap'))
                 db.session.commit()     
         '''
+        # Much better request handling
         for i in range(len(data)):
             # printer.pprint(data[i].get('name'))
             new_coin = Coin.query.filter_by(name=data[i].get('name')).first()
