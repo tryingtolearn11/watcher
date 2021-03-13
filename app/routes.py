@@ -9,14 +9,17 @@ import pprint
 from sqlalchemy import desc, asc
 
 # QUERIES AT EVERY INTERVAL
-@scheduler.task('interval', id='do_job_1', seconds=200)
+@scheduler.task('interval', id='do_job_1', seconds=120)
 def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB DONE")
         # Get a request from api
         printer = pprint.PrettyPrinter()
-        data = cg.get_coins_markets(vs_currency='usd', order='market_cap_desc', per_page=250)
+        data = cg.get_coins_markets(vs_currency='usd', order='market_cap_desc',
+                                    per_page=250, price_change_percentage='24h')
+        
         #printer.pprint(data) 
+        '''
         res = []
         for d in data:
             rank = {k: d[k] for k in d.keys() and {'symbol','price_change_24h','name',
@@ -51,7 +54,42 @@ def job1():
                 setattr(new_coin, 'market_cap_rank',res[i].get('market_cap_rank')) 
                 setattr(new_coin, 'market_cap', res[i].get('market_cap'))
                 db.session.commit()     
-        
+        '''
+        for i in range(len(data)):
+            # printer.pprint(data[i].get('name'))
+            new_coin = Coin.query.filter_by(name=data[i].get('name')).first()
+            if new_coin is None:
+                new_coin = Coin(name=data[i].get('name'), symbol=data[i].get('symbol'),
+                                current_price=data[i].get('current_price'),
+                                market_cap_rank=data[i].get('market_cap_rank'),
+                                market_cap=data[i].get('market_cap'),
+                                price_change_24h=data[i].get('price_change_percentage_24h'))
+
+                print("Added : ", new_coin)
+                db.session.add(new_coin)
+                db.session.commit()
+            else:
+                setattr(new_coin, 'current_price', data[i].get('current_price')) 
+                setattr(new_coin, 'market_cap_rank',data[i].get('market_cap_rank')) 
+                setattr(new_coin, 'market_cap', data[i].get('market_cap'))
+                setattr(new_coin, 'price_change_24h',data[i].get('price_change_percentage_24h'))
+                db.session.commit()     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # pycoingecko
 cg = CoinGeckoAPI()
