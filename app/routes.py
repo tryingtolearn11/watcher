@@ -15,7 +15,7 @@ def job1():
         print("INTERVAL JOB DONE")
         # Get a request from api
         printer = pprint.PrettyPrinter()
-        data = cg.get_coins_markets(vs_currency='usd')
+        data = cg.get_coins_markets(vs_currency='usd', order='market_cap_desc', per_page=250)
         #printer.pprint(data) 
         res = []
         for d in data:
