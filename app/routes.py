@@ -9,7 +9,7 @@ import pprint
 from sqlalchemy import desc, asc
 
 # QUERIES AT EVERY INTERVAL
-@scheduler.task('interval', id='do_job_1', seconds=120)
+@scheduler.task('interval', id='do_job_1', seconds=300)
 def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB DONE")
@@ -64,7 +64,8 @@ def job1():
                                 current_price=data[i].get('current_price'),
                                 market_cap_rank=data[i].get('market_cap_rank'),
                                 market_cap=data[i].get('market_cap'),
-                                price_change_24h=data[i].get('price_change_percentage_24h'))
+                                price_change_24h=data[i].get('price_change_percentage_24h'),
+                                image=data[i].get('image'))
 
                 print("Added : ", new_coin)
                 db.session.add(new_coin)
@@ -144,10 +145,10 @@ def coins():
     # Seems that sorting by time works -for now    
     #all_coins = Coin.query.order_by(asc(Coin.timestamp)).limit(100).all()
     
-    COINS_PER_PAGE = 5
+    COINS_PER_PAGE = 50 
     page = request.args.get('page', 1, type=int)
     coins = Coin.query.paginate(page, COINS_PER_PAGE, False)
-    print(type(coins))
+    # print(type(coins))
     # Paginate
 
     #print(len(all_coins))

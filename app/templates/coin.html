@@ -9,6 +9,7 @@
             <th scope="col">Rank #</th>
             <th scope="col"> Coin </th>
             <th scope="col">    </th>
+            <th scope="col">    </th>
             <th scope="col"> Current Price </th>
             <th scope="col"> Price Change 24h </th>
             <th scope="col"> Market Cap </th>
@@ -19,6 +20,7 @@
         <tr key = {{k.name}}></td>
             <td>{{  k.market_cap_rank }}</td>
             <td>{{  k.name }}</td>
+            <td><img src="{{k.image}}" alt="" border=3 width=20 height=20></img></td>
             <td>{{  k.symbol }}</td>
             <td>{{  k.current_price   }}</td>
             <td>{{  k.price_change_24h}}</td>
@@ -62,57 +64,6 @@
 <p class="text-right mt-3">
     Showing Page {{ coins.page }} of {{ coins.pages }}
 </p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
