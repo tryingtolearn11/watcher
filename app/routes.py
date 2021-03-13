@@ -9,7 +9,7 @@ import pprint
 from sqlalchemy import desc, asc
 
 # QUERIES AT EVERY INTERVAL
-@scheduler.task('interval', id='do_job_1', seconds=120)
+@scheduler.task('interval', id='do_job_1', seconds=10)
 def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB DONE")
@@ -29,6 +29,14 @@ def job1():
         # TODO: RANK BUG: DUPLICATE RANKS 
         for i in range(len(res)):
             new_coin = Coin.query.filter_by(name=res[i].get('name')).first() 
+            # Trying to fix the condition for the last coin on the board. It
+            # breaks the entire system
+            if i == len(res) and new_coin is not None:
+                print("removed :", new_coin)
+                db.session.delete(new_coin)
+                db.session.commit()
+                
+
             if new_coin is None:
                 new_coin = Coin(res[i].get('name'), res[i].get('symbol'),
                                 res[i].get('current_price'),
@@ -95,12 +103,14 @@ def register():
 @app.route('/coins')
 def coins():
     # Seems that sorting by time works -for now    
-    #all_coins = Coin.query.order_by(Coin.market_cap_rank.asc()).all() 
-    #print(len(all_coins))
-    all_coins = Coin.query.order_by(asc(Coin.timestamp)).limit(100).all()
-    print(type(all_coins))
+    #all_coins = Coin.query.order_by(asc(Coin.timestamp)).limit(100).all()
+    all_coins = Coin.query.all()
+    print(len(all_coins))
     all_coins.sort(key=lambda x: x.market_cap_rank)
-
+    for i in range(len(all_coins)-1):
+        if all_coins[i].market_cap_rank == all_coins[i+1].market_cap_rank:
+            print(all_coins[i], all_coins[i+1])
+    print(len(all_coins))
     return render_template("coin.html", title="Coins",all_coins=all_coins)
 
 
