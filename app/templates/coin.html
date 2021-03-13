@@ -28,6 +28,42 @@
     </tbody>
 </table>
 <!-- Pagination -->
+<div class="text-right">
+    <a href="{{ url_for('coins', page=coins.prev_num) }}"
+       class="btn btn-outline-dark
+        {% if coins.page == 1 %}disabled{% endif %}">
+        &laquo;
+    </a>
+    {% for page_num in coins.iter_pages(left_edge=1, right_edge=1,
+    left_current=1, right_current=2) %}
+
+    {% if page_num %}
+        {% if coins.page == page_num %}
+        <a href="{{ url_for('coins', page=page_num) }}"
+           class="btn btn-dark">
+            {{ page_num }}
+        </a>
+        {% else %}
+        <a href="{{ url_for('coins', page=page_num) }}"
+           class="btn btn-outline-dark">
+            {{ page_num }}
+        </a>
+        {% endif %}
+        {% else %}
+        {% endif %}
+        {% endfor %}
+        
+        <a href="{{ url_for('coins', page=coins.next_num) }}"
+           class="btn btn-outline-dark
+                        {% if coins.page == coins.pages %}disabled{% endif %}">
+            &raquo;
+        </a>
+</div>
+<p class="text-right mt-3">
+    Showing Page {{ coins.page }} of {{ coins.pages }}
+</p>
+
+
 
 
 
