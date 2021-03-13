@@ -15,7 +15,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for k in all_coins %}
+        {% for k in all_coins.items %}
         <tr key = {{k.name}}></td>
             <td>{{  k.market_cap_rank }}</td>
             <td>{{  k.name }}</td>

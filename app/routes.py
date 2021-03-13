@@ -143,13 +143,18 @@ def register():
 def coins():
     # Seems that sorting by time works -for now    
     #all_coins = Coin.query.order_by(asc(Coin.timestamp)).limit(100).all()
-    all_coins = Coin.query.all()
-    print(len(all_coins))
-    all_coins.sort(key=lambda x: x.market_cap_rank)
-    for i in range(len(all_coins)-1):
-        if all_coins[i].market_cap_rank == all_coins[i+1].market_cap_rank:
-            print(all_coins[i], all_coins[i+1])
-    print(len(all_coins))
+
+    page = request.args.get('page', 1, type=int)
+    all_coins = Coin.query.paginate(page, app.config['COINS_PER_PAGE'], False)
+    print(type(all_coins))
+    # Paginate
+
+    #print(len(all_coins))
+    #all_coins.sort(key=lambda x: x.market_cap_rank)
+    #for i in range(len(all_coins)-1):
+    #   if all_coins[i].market_cap_rank == all_coins[i+1].market_cap_rank:
+    #      print(all_coins[i], all_coins[i+1])
+    #print(len(all_coins))
     return render_template("coin.html", title="Coins",all_coins=all_coins)
 
 
