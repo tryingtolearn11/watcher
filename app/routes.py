@@ -20,43 +20,6 @@ def job1():
                                     per_page=250,
                                     price_change_percentage='24h,7d')
         
-        #printer.pprint(data) 
-        '''
-        res = []
-        for d in data:
-            rank = {k: d[k] for k in d.keys() and {'symbol','price_change_24h','name',
-                                               'current_price','market_cap_rank','market_cap'}}  
-            res.append(rank)
-    
-        keys = list(res[0].keys())
-        # print(keys)
-
-        # TODO: RANK BUG: DUPLICATE RANKS 
-        for i in range(len(res)):
-            new_coin = Coin.query.filter_by(name=res[i].get('name')).first() 
-            # Trying to fix the condition for the last coin on the board. It
-            # breaks the entire system
-            if i == len(res) and new_coin is not None:
-                print("removed :", new_coin)
-                db.session.delete(new_coin)
-                db.session.commit()
-                
-
-            if new_coin is None:
-                new_coin = Coin(res[i].get('name'), res[i].get('symbol'),
-                                res[i].get('current_price'),
-                                res[i].get('market_cap_rank'),
-                                res[i].get('market_cap'),  res[i].get('price_change_24h'))
-                print("Added : ", new_coin)
-                db.session.add(new_coin)
-                db.session.commit()
-
-            else:
-                setattr(new_coin, 'current_price', res[i].get('current_price')) 
-                setattr(new_coin, 'market_cap_rank',res[i].get('market_cap_rank')) 
-                setattr(new_coin, 'market_cap', res[i].get('market_cap'))
-                db.session.commit()     
-        '''
         # Much better request handling
         for i in range(len(data)):
             #printer.pprint(data[i].get('price_change_percentage_7d_in_currency'))
@@ -81,20 +44,6 @@ def job1():
                 setattr(new_coin, 'price_change_24h',data[i].get('price_change_percentage_24h'))
                 setattr(new_coin,'price_change_7d',data[i].get('price_change_percentage_7d_in_currency'))
                 db.session.commit()     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
