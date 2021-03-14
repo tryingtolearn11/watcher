@@ -22,13 +22,34 @@
             <td>{{  k.name }}</td>
             <td><img src="{{k.image}}" alt="" border=3 width=20 height=20></img></td>
             <td><span style="text-transform:uppercase"> {{ k.symbol }} </span></td>
-            <td>{{  k.current_price   }}</td>
+            <td>{{'{:,.2f}'.format('2000')}}</td>
             <td>{{  k.price_change_24h}}</td>
             <td>{{  k.market_cap   }}</td>
         {% endfor %}
         </tr>
     </tbody>
 </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!-- Pagination -->
 <div class="text-right">
     <a href="{{ url_for('coins', page=coins.prev_num) }}"
