@@ -10,7 +10,7 @@ from sqlalchemy import desc, asc
 
 
 # QUERIES AT EVERY INTERVAL
-@scheduler.task('interval', id='do_job_1', seconds=300)
+@scheduler.task('interval', id='do_job_1', seconds=20)
 def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB DONE")
@@ -172,8 +172,6 @@ app.jinja_env.filters['number_format'] = number_format
 
 @app.route('/coins')
 def coins():
-    # Seems that sorting by time works -for now    
-    #all_coins = Coin.query.order_by(asc(Coin.timestamp)).limit(100).all()
     
     COINS_PER_PAGE = 50 
     page = request.args.get('page', 1, type=int)
