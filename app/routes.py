@@ -149,11 +149,22 @@ def profile():
 
 
 # Jinja2 custom filter
-# Currency Formatter
-def format(price):
-    return "${:,.2f}".format(price)
-app.jinja_env.filters['format'] = format
+# TODO: WRITE CUSTOM FILTERS FOR FORMATTING CURRENCY, PERCENTAGES, NUMBERS
 
+# Currency Formatter
+def currency_format(price):
+    return "${:,.2f}".format(price)
+
+
+# Number Formatter
+def number_format(number):
+    return '{:,}'.format(number)
+
+
+
+# FILTERS 
+app.jinja_env.filters['currency_format'] = currency_format
+app.jinja_env.filters['number_format'] = number_format
 
 
 
