@@ -1,0 +1,17 @@
+.coin-title{
+    text-align: center;
+}
+
+
+
+.form-center {
+    display: block;
+    text-align: center;
+
+}
+login {
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+}
