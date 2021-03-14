@@ -7,10 +7,10 @@ from werkzeug.urls import url_parse
 from pycoingecko import CoinGeckoAPI
 import pprint
 from sqlalchemy import desc, asc
-
+from jinja2 import Markup
 
 # QUERIES AT EVERY INTERVAL
-@scheduler.task('interval', id='do_job_1', seconds=20)
+@scheduler.task('interval', id='do_job_1', seconds=200)
 def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB DONE")
@@ -160,12 +160,15 @@ def currency_format(price):
 def number_format(number):
     return '{:,}'.format(number)
 
-
-
+# Percent Color Formatter
+def percent_color_format(value):
+    #return  "{:.2%}".format(value)
+    s = str(value)
+    return s[:4]+"%"
 # FILTERS 
 app.jinja_env.filters['currency_format'] = currency_format
 app.jinja_env.filters['number_format'] = number_format
-
+app.jinja_env.filters['percent_color_format'] = percent_color_format
 
 
 

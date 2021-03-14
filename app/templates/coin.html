@@ -23,7 +23,7 @@
             <td><img src="{{k.image}}" alt="" border=3 width=20 height=20></img></td>
             <td><span style="text-transform:uppercase"> {{ k.symbol }} </span></td>
             <td>{{ k.current_price | currency_format() }}</td>
-            <td>{{  k.price_change_24h}}</td>
+            <td>{{  k.price_change_24h | percent_color_format() }}</td>
             <td>{{  k.market_cap | number_format() }}</td>
         {% endfor %}
         </tr>
