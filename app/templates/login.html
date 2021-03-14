@@ -3,7 +3,8 @@
 {% block content %}
 
     <h1> LOGIN TEMPORARILY DISABLED </h1>
-    <h3>Sign In</h3>
+    <h3>Sign In</h3> 
+    <div class="login">
     <form action ="" method="post" novalidate>
         {{ form.hidden_tag() }}
         <p>
@@ -27,7 +28,7 @@
     </form>
 
     <p>New User? <a href="{{ url_for('register') }}">Register Here</a></p>
-
+    </div>
 
 
 {% endblock %}

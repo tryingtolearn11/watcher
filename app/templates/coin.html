@@ -1,8 +1,9 @@
 {% extends "base.html" %}
  
 {% block content %}
-<h2>This is coin page</h2>
-<table style="width:50%" class="table table-hover table-light text-center
+<div class="text-center m-5">
+    <h2>Cryptocurrency Prices</h2></div>
+<table style="width:60%" class="table table-hover table-light text-center
     table-bordered" align="center" style="margin: 0px auto;">
     <thead>
         <tr>
@@ -53,7 +54,7 @@
 
 
 <!-- Pagination -->
-<div class="text-right">
+<div class="text-center">
     <a href="{{ url_for('coins', page=coins.prev_num) }}"
        class="btn btn-outline-dark
         {% if coins.page == 1 %}disabled{% endif %}">
@@ -84,7 +85,7 @@
             &raquo;
         </a>
 </div>
-<p class="text-right mt-3">
+<p class="text-center mt-3">
     Showing Page {{ coins.page }} of {{ coins.pages }}
 </p>
 
