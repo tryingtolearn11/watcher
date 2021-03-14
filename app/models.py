@@ -38,18 +38,20 @@ class Coin(db.Model):
     market_cap = db.Column(db.String(180))
     market_cap_rank = db.Column(db.Integer)
     price_change_24h = db.Column(db.Float)
+    price_change_7d = db.Column(db.Float)
     image = db.Column(db.String(180))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     
 
     def __init__(self, name, symbol, current_price, market_cap_rank,
-                 market_cap, price_change_24h, image):
+                 market_cap, price_change_24h, price_change_7d, image):
         self.name = name
         self.symbol = symbol
         self.current_price = current_price
         self.market_cap_rank = market_cap_rank
         self.market_cap = market_cap
         self.price_change_24h = price_change_24h 
+        self.price_change_7d = price_change_7d
         self.image = image
 
     def __repr__(self):

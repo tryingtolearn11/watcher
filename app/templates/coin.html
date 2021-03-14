@@ -12,6 +12,7 @@
             <th scope="col">    </th>
             <th scope="col"> Current Price </th>
             <th scope="col"> Price Change 24h </th>
+            <th scope="col"> Price Change 7d</th>
             <th scope="col"> Market Cap </th>
         </tr>
     </thead>
@@ -24,6 +25,7 @@
             <td><span style="text-transform:uppercase"> {{ k.symbol }} </span></td>
             <td>{{ k.current_price | currency_format() }}</td>
             <td>{{  k.price_change_24h | percent_color_format() }}</td>
+            <td>{{  k.price_change_7d | percent_color_format() }}</td>
             <td>{{  k.market_cap | number_format() }}</td>
         {% endfor %}
         </tr>

@@ -10,14 +10,15 @@ from sqlalchemy import desc, asc
 from jinja2 import Markup
 
 # QUERIES AT EVERY INTERVAL
-@scheduler.task('interval', id='do_job_1', seconds=200)
+@scheduler.task('interval', id='do_job_1', seconds=300)
 def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB DONE")
         # Get a request from api
         printer = pprint.PrettyPrinter()
         data = cg.get_coins_markets(vs_currency='usd', order='market_cap_desc',
-                                    per_page=250, price_change_percentage='24h')
+                                    per_page=250,
+                                    price_change_percentage='24h,7d')
         
         #printer.pprint(data) 
         '''
@@ -58,14 +59,16 @@ def job1():
         '''
         # Much better request handling
         for i in range(len(data)):
-            # printer.pprint(data[i].get('name'))
+            #printer.pprint(data[i].get('price_change_percentage_7d_in_currency'))
             new_coin = Coin.query.filter_by(name=data[i].get('name')).first()
+
             if new_coin is None:
                 new_coin = Coin(name=data[i].get('name'), symbol=data[i].get('symbol'),
                                 current_price=data[i].get('current_price'),
                                 market_cap_rank=data[i].get('market_cap_rank'),
                                 market_cap=data[i].get('market_cap'),
                                 price_change_24h=data[i].get('price_change_percentage_24h'),
+                                price_change_7d=data[i].get('price_change_percentage_7d_in_currency'),
                                 image=data[i].get('image'))
 
                 print("Added : ", new_coin)
@@ -76,6 +79,7 @@ def job1():
                 setattr(new_coin, 'market_cap_rank',data[i].get('market_cap_rank')) 
                 setattr(new_coin, 'market_cap', data[i].get('market_cap'))
                 setattr(new_coin, 'price_change_24h',data[i].get('price_change_percentage_24h'))
+                setattr(new_coin,'price_change_7d',data[i].get('price_change_percentage_7d_in_currency'))
                 db.session.commit()     
 
 
