@@ -118,12 +118,13 @@ def number_format(number):
 # Percent Color Formatter
 def percent_color_format(value):
     s = str(value)
-    if value < 0: 
+    negative = "-"
+    if s == "None":
+        return " "
+    if  negative in s:
         return Markup('<span style="color:red"> {} </span>'.format(s[:4]+"%"))
-    elif value > 0:
-        return Markup('<span style="color:green"> {} </span>'.format(s[:4]+"%"))
     else:
-        return s[:4]+"%"
+        return Markup('<span style="color:green"> {} </span>'.format(s[:4]+"%"))
 
 
 # FILTERS 
