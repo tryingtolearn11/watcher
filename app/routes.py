@@ -150,6 +150,8 @@ def profile():
 
 # Jinja2 custom filter
 # TODO: WRITE CUSTOM FILTERS FOR FORMATTING CURRENCY, PERCENTAGES, NUMBERS
+# TODO: Move these filers into their own files and keep app.jinja_env in
+# __init__.py
 
 # Currency Formatter
 def currency_format(price):
@@ -162,9 +164,15 @@ def number_format(number):
 
 # Percent Color Formatter
 def percent_color_format(value):
-    #return  "{:.2%}".format(value)
     s = str(value)
-    return s[:4]+"%"
+    if value < 0: 
+        return Markup('<span style="color:red"> {} </span>'.format(s[:4]+"%"))
+    elif value > 0:
+        return Markup('<span style="color:green"> {} </span>'.format(s[:4]+"%"))
+    else:
+        return s[:4]+"%"
+
+
 # FILTERS 
 app.jinja_env.filters['currency_format'] = currency_format
 app.jinja_env.filters['number_format'] = number_format
