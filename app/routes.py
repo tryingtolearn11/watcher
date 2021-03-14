@@ -8,6 +8,7 @@ from pycoingecko import CoinGeckoAPI
 import pprint
 from sqlalchemy import desc, asc
 
+
 # QUERIES AT EVERY INTERVAL
 @scheduler.task('interval', id='do_job_1', seconds=300)
 def job1():
@@ -140,6 +141,24 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 
+
+@app.route('/profile')
+@login_required
+def profile():
+    return render_template("profile.html",title="Profile")
+
+
+# Jinja2 custom filter
+# Currency Formatter
+def format(price):
+    return "${:,.2f}".format(price)
+app.jinja_env.filters['format'] = format
+
+
+
+
+
+
 @app.route('/coins')
 def coins():
     # Seems that sorting by time works -for now    
@@ -166,12 +185,6 @@ def news():
     return redirect(url_for('index'))
 
 
-
-
-@app.route('/profile')
-@login_required
-def profile():
-    return render_template("profile.html",title="Profile")
 
 
 
