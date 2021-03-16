@@ -8,9 +8,11 @@ from pycoingecko import CoinGeckoAPI
 import pprint
 from sqlalchemy import desc, asc
 from jinja2 import Markup
+from collections import OrderedDict
+
 
 # QUERIES AT EVERY INTERVAL
-@scheduler.task('interval', id='do_job_1', seconds=300)
+@scheduler.task('interval', id='do_job_1', seconds=10)
 def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB DONE")
@@ -144,7 +146,11 @@ def coins():
     # PAGINATE HERE
     COINS_PER_PAGE = 50 
     page = request.args.get('page', 1, type=int)
-    coins = Coin.query.paginate(page, COINS_PER_PAGE, False)
+    # Sort and Paginate
+    coins = Coin.query.order_by(Coin.market_cap_rank.asc()).paginate(page, COINS_PER_PAGE, False)
+
+
+
 
     #print(len(all_coins))
     #all_coins.sort(key=lambda x: x.market_cap_rank)
