@@ -12,7 +12,7 @@ from collections import OrderedDict
 
 
 # QUERIES AT EVERY INTERVAL
-@scheduler.task('interval', id='do_job_1', seconds=10)
+@scheduler.task('interval', id='do_job_1', seconds=300)
 def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB DONE")
