@@ -14,7 +14,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), unique=True)
     password_hash = db.Column(db.String(128))
     followed =db.relationship('Coin',secondary=followers,backref=db.backref('subscribers',lazy='dynamic'))
-
+    
 
     '''
     followed = db.relationship('Coin', secondary=followers,
@@ -25,12 +25,37 @@ class User(UserMixin, db.Model):
 
     '''
 
-
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+
+    def follow(self, user):
+        if not self.is_following(coin):
+            self.subscribers.append(coin)
+
+
+    def unfollow(self, user):
+        if self.is_following(coin):
+            self.subscribers.remove(coin)
+
+    def is_following(self, user):
+        return self.subscribers.filter(followers.c.user_id == user.id).count() > 0
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
