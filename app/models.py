@@ -4,13 +4,22 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
 
+# Need to create an association table
+subs = db.Table('subs',
+                     db.Column('id', db.Integer, db.ForeignKey('user.id')),
+                     db.Column('id', db.Integer, db.ForeignKey('coin.id')))
 # UserMixin implements generic properties: is_authenticated, etc
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True)
     email = db.Column(db.String(120), unique=True)
     password_hash = db.Column(db.String(128))
-    
+    subscriptions =db.relationship('Coin',secondary=subs,backref=db.backref('subscribers'),lazy='dynamic')
+
+
+
+
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -59,3 +68,4 @@ class Coin(db.Model):
                                                        self.current_price, self.market_cap_rank)
        # return '<Coin {}, Price {}, Market Cap {}, Time
        # {}>,'.format(self.name,self.current_price, self.market_cap, self.#timestamp)
+
