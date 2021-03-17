@@ -13,7 +13,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), unique=True)
     email = db.Column(db.String(120), unique=True)
     password_hash = db.Column(db.String(128))
-    followed =db.relationship('Coin',secondary=followers,backref=db.backref('subscribers',lazy='dynamic'))
+    followed=db.relationship('Coin',secondary=followers,backref=db.backref('subscribers',lazy='dynamic'),lazy='dynamic')
     
 
     '''
@@ -25,6 +25,8 @@ class User(UserMixin, db.Model):
 
     '''
 
+    # TODO: Fix these methods: Need to have methods to follow, unfollow
+    '''
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -32,19 +34,19 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
 
-    def follow(self, user):
-        if not self.is_following(coin):
-            self.subscribers.append(coin)
+    def follow(self, Coin):
+        if not self.is_following(Coin):
+            self.followed.append(Coin)
 
 
-    def unfollow(self, user):
-        if self.is_following(coin):
-            self.subscribers.remove(coin)
+   # def unfollow(self, coin):
+   #     if self.is_following(coin):
+   #         self.subscribers.remove(coin)
 
-    def is_following(self, user):
-        return self.subscribers.filter(followers.c.user_id == user.id).count() > 0
+    def is_following(self, Coin):
+        return self.followed.filter(Coin.subscribers.coin_id == Coin.id).count() > 0
 
-
+    '''
 
 
 
@@ -58,7 +60,7 @@ class User(UserMixin, db.Model):
 
 
     def __repr__(self):
-        return '<User {}>'.format(self.username)
+        return '<User {}, followed {} >'.format(self.username, self.followed)
 
 
 
