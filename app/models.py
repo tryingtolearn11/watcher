@@ -5,19 +5,25 @@ from flask_login import UserMixin
 
 
 # Need to create an association table
-subs = db.Table('subs',
-                     db.Column('id', db.Integer, db.ForeignKey('user.id')),
-                     db.Column('id', db.Integer, db.ForeignKey('coin.id')))
+followers = db.Table('followers',db.Column('user_id', db.Integer, db.ForeignKey('user.id')),db.Column('coin_id', db.Integer, db.ForeignKey('coin.id')))
+
 # UserMixin implements generic properties: is_authenticated, etc
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True)
     email = db.Column(db.String(120), unique=True)
     password_hash = db.Column(db.String(128))
-    subscriptions =db.relationship('Coin',secondary=subs,backref=db.backref('subscribers'),lazy='dynamic')
+    followed =db.relationship('Coin',secondary=followers,backref=db.backref('subscribers',lazy='dynamic'))
 
 
+    '''
+    followed = db.relationship('Coin', secondary=followers,
+                                    primaryjoin=(followers.c.user_id == id),
+                                    secondaryjoin=(followers.c.coin_id == id),
+                                    backref=db.backref('followers', lazy='dynamic'),
+                                    lazy='dynamic')
 
+    '''
 
 
     def set_password(self, password):
