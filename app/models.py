@@ -16,23 +16,23 @@ class User(UserMixin, db.Model):
     followed=db.relationship('Coin',secondary=followers,backref=db.backref('subscribers',lazy='dynamic'),lazy='dynamic')
     
 
-    '''
-    followed = db.relationship('Coin', secondary=followers,
-                                    primaryjoin=(followers.c.user_id == id),
-                                    secondaryjoin=(followers.c.coin_id == id),
-                                    backref=db.backref('followers', lazy='dynamic'),
-                                    lazy='dynamic')
-
-    '''
-
-    # TODO: Fix these methods: Need to have methods to follow, unfollow
-    '''
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    def __repr__(self):
+        return '<User {}, followed {} >'.format(self.username, self.followed)
+    
+
+
+
+
+
+    # TODO: Fix these methods: Need to have methods to follow, unfollow
+
+    '''
 
     def follow(self, Coin):
         if not self.is_following(Coin):
@@ -51,23 +51,9 @@ class User(UserMixin, db.Model):
 
 
 
-
-
-
-
-
-
-
-
-    def __repr__(self):
-        return '<User {}, followed {} >'.format(self.username, self.followed)
-
-
-
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
-
 
 
 
@@ -99,6 +85,4 @@ class Coin(db.Model):
     def __repr__(self):
         return '<Coin {}, Symbol {}, Price {}, MarketCap Rank {}>'.format(self.name, self.symbol,
                                                        self.current_price, self.market_cap_rank)
-       # return '<Coin {}, Price {}, Market Cap {}, Time
-       # {}>,'.format(self.name,self.current_price, self.market_cap, self.#timestamp)
 
