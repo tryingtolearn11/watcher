@@ -21,8 +21,10 @@
     <tbody>
         {% for k in coins.items %}
         <tr key = {{k.name}}></td>
+            {% if not current_user.is_anonymous %}
             <td><img src="{{ url_for('static', filename='eyewatch.png')}}"
                 alt="" border=3 width=20 height=10></img></td>
+            {% endif %}
             <td>{{  k.market_cap_rank }}</td>
             <td>{{  k.name }}</td>
             <td><img src="{{k.image}}" alt="" border=3 width=20 height=20></img></td>
