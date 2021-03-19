@@ -7,6 +7,7 @@
     table-bordered" align="center" style="margin: 0px auto;">
     <thead>
         <tr>
+            <th scope="col">    </th>
             <th scope="col">Rank #</th>
             <th scope="col"> Coin </th>
             <th scope="col">    </th>
@@ -20,6 +21,8 @@
     <tbody>
         {% for k in coins.items %}
         <tr key = {{k.name}}></td>
+            <td><img src="{{ url_for('static', filename='eyewatch.png')}}"
+                alt="" border=3 width=20 height=10></img></td>
             <td>{{  k.market_cap_rank }}</td>
             <td>{{  k.name }}</td>
             <td><img src="{{k.image}}" alt="" border=3 width=20 height=20></img></td>

@@ -139,10 +139,6 @@ app.jinja_env.filters['percent_color_format'] = percent_color_format
 
 @app.route('/coins')
 def coins():
-    # TODO: Maybe we can make a custom filter for jinja and then sort the items
-    # in allcoins from coin.html?
-    # Or maybe just sort the coins before they get ranked i.e. sort them in
-    # this function. 
     # PAGINATE HERE
     COINS_PER_PAGE = 50 
     page = request.args.get('page', 1, type=int)
@@ -150,14 +146,6 @@ def coins():
     coins = Coin.query.order_by(Coin.market_cap_rank.asc()).paginate(page, COINS_PER_PAGE, False)
 
 
-
-
-    #print(len(all_coins))
-    #all_coins.sort(key=lambda x: x.market_cap_rank)
-    #for i in range(len(all_coins)-1):
-    #   if all_coins[i].market_cap_rank == all_coins[i+1].market_cap_rank:
-    #      print(all_coins[i], all_coins[i+1])
-    #print(len(all_coins))
     return render_template("coin.html", title="Coins",coins=coins)
 
 

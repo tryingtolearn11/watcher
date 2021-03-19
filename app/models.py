@@ -14,7 +14,9 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), unique=True)
     password_hash = db.Column(db.String(128))
     followed=db.relationship('Coin',secondary=followers,backref=db.backref('subscribers',lazy='dynamic'),lazy='dynamic')
+   
     
+
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -26,12 +28,6 @@ class User(UserMixin, db.Model):
         return '<User {}, followed {} >'.format(self.username,
                                                 self.followed.all())
     
-
-
-
-
-
-    # TODO: Fix these methods: Need to have methods to follow, unfollow
 
     
 
