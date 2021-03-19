@@ -23,7 +23,8 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
     def __repr__(self):
-        return '<User {}, followed {} >'.format(self.username, self.followed)
+        return '<User {}, followed {} >'.format(self.username,
+                                                self.followed.all())
     
 
 
@@ -34,14 +35,14 @@ class User(UserMixin, db.Model):
 
     
 
-    def follow(self, Coin):
-        if not self.is_following(Coin):
-            self.followed.append(Coin)
+    def follow(self, coin):
+        if not self.is_following(coin):
+            self.followed.append(coin)
 
 
-   # def unfollow(self, coin):
-   #     if self.is_following(coin):
-   #         self.subscribers.remove(coin)
+    def unfollow(self, coin):
+        if self.is_following(coin):
+            self.followed.remove(coin)
 
     def is_following(self, coin):
         return self.followed.filter(followers.c.coin_id == coin.id).count() > 0
