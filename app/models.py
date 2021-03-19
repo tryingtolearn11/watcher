@@ -32,7 +32,7 @@ class User(UserMixin, db.Model):
 
     # TODO: Fix these methods: Need to have methods to follow, unfollow
 
-    '''
+    
 
     def follow(self, Coin):
         if not self.is_following(Coin):
@@ -43,10 +43,10 @@ class User(UserMixin, db.Model):
    #     if self.is_following(coin):
    #         self.subscribers.remove(coin)
 
-    def is_following(self, Coin):
-        return self.followed.filter(Coin.subscribers.coin_id == Coin.id).count() > 0
+    def is_following(self, coin):
+        return self.followed.filter(followers.c.coin_id == coin.id).count() > 0
 
-    '''
+
 
 
 
