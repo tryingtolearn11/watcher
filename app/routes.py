@@ -158,11 +158,11 @@ def follow(name):
         coin = Coin.query.filter_by(name=name).first()
         print(coin)
         if coin is None:
-            flask('Coin {} not found.'.format(name))
+            flash('Coin {} not found.'.format(name))
             return redirect(url_for('coin'))
         current_user.follow(coin)
         db.session.commit()
-        flask('You are following {}'.format(name))
+        flash('You are following {}'.format(name))
         return redirect(url_for('index'))
 '''
    
@@ -176,6 +176,28 @@ def news():
 def follow(coin_id, action):
     coin = Coin.query.filter_by(id=coin_id).first_or_404()
     print(coin)
+    if action == "follow":
+        current_user.follow(coin)
+        flash('You are following {}'.format(coin.name))
+        db.session.commit()
+
+    return redirect(request.referrer)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
