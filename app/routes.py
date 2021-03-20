@@ -180,7 +180,11 @@ def follow(coin_id, action):
         current_user.follow(coin)
         flash('You are following {}'.format(coin.name))
         db.session.commit()
-
+    elif action == "unfollow":
+        current_user.unfollow(coin)
+        flash('You unfollowed {}'.format(coin.name))
+        db.session.commit()
+        
     return redirect(request.referrer)
 
 

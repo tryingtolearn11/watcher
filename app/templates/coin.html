@@ -24,11 +24,19 @@
         {% for k in coins.items %}
         <tr key = {{k.name}}></td>
             {% if not current_user.is_anonymous %}
-            <td><img src="{{ url_for('static', filename='eyewatch.png')}}"
-                alt="" border=3 width=20 height=10></img></td>
+            <td>
+                {% if current_user.is_following(k) %}
+                <a href="{{url_for('follow', coin_id=k.id, action='unfollow')}}">
+                    <img src="{{ url_for('static', filename='eyewatch.png')}}"
+                     alt="" border=3 width=20 height=10></img></a></td>
+                {% else %}
+                
+                    <a href="{{url_for('follow', coin_id=k.id, action='follow')}}">
+                    <img src="{{ url_for('static', filename='eyewatch.png')}}"
+                     alt="" border=3 width=20 height=10></img></a></td>
+             {% endif %} 
             {% endif %}
-            <td><a href="{{url_for('follow', coin_id=k.id, action='follow')
-                              }}">Follow</a></td>
+            
             <td>{{  k.market_cap_rank }}</td>
             <td>{{  k.name }}</td>
             <td><img src="{{k.image}}" alt="" border=3 width=20 height=20></img></td>
