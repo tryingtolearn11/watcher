@@ -7,7 +7,9 @@
     table-bordered" align="center" style="margin: 0px auto;">
     <thead>
         <tr>
+            {% if not current_user.is_anonymous %}
             <th scope="col">    </th>
+            {% endif %}
             <th scope="col">Rank #</th>
             <th scope="col"> Coin </th>
             <th scope="col">    </th>

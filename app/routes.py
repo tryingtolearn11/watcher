@@ -1,6 +1,6 @@
 from app import app, db, scheduler
 from app.models import Coin, User
-from app.forms import LoginForm, RegistrationForm
+from app.forms import LoginForm, RegistrationForm, EmptyForm
 from flask_login import current_user, login_user, logout_user, login_required
 from flask import render_template, redirect, url_for, flash, request
 from werkzeug.urls import url_parse
@@ -149,7 +149,23 @@ def coins():
     return render_template("coin.html", title="Coins",coins=coins)
 
 
+'''
 
+@app.route('/follow/<name>', methods=['POST'])
+def follow(name):
+    form=EmptyForm()
+    if form.validate_on_submit():
+        coin = Coin.query.filter_by(name=name).first()
+        print(coin)
+        if coin is None:
+            flask('Coin {} not found.'.format(name))
+            return redirect(url_for('coin'))
+        current_user.follow(coin)
+        db.session.commit()
+        flask('You are following {}'.format(name))
+        return redirect(url_for('index'))
+'''
+   
 @app.route('/news')
 def news():
     return redirect(url_for('index'))
