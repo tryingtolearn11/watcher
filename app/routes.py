@@ -171,10 +171,11 @@ def news():
     return redirect(url_for('index'))
 
 
-
-
-
-
+@app.route('/follow/<int:coin_id>/<action>')
+@login_required
+def follow(coin_id, action):
+    coin = Coin.query.filter_by(id=coin_id).first_or_404()
+    print(coin)
 
 
 

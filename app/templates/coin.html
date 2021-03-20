@@ -27,6 +27,8 @@
             <td><img src="{{ url_for('static', filename='eyewatch.png')}}"
                 alt="" border=3 width=20 height=10></img></td>
             {% endif %}
+            <td><a href="{{url_for('follow', coin_id=k.id, action='follow')
+                              }}">Follow</a></td>
             <td>{{  k.market_cap_rank }}</td>
             <td>{{  k.name }}</td>
             <td><img src="{{k.image}}" alt="" border=3 width=20 height=20></img></td>
