@@ -4,11 +4,18 @@
 {% block content %}
 <h1> {{ coin_page.name }} </h1>
 
-<p>{{ historical_data.get('prices') }}</p>
+{{ js_resources | indent(4)|safe }}
+{{ css_resources|indent(4)|safe }}
+{{ plot_script|indent(4)|safe }}
+<div>
+{{ plot_div|indent(4)|safe }}
+</div>
+
+
+
 <body>
-    <a href="{{url_for('bokeh') }}">GRAPH</a>
-    {% for times in historical_data.get('prices') %}
-        <p> {{ times[0] }} </p>
-    {% endfor %}
+
+<p>{{ historical_data.get('prices') }}</p>
 </body>
 {% endblock %}
+

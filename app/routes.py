@@ -154,9 +154,6 @@ def follow(coin_id, action):
 
 # SOME TEST DATA
 
-historical_data_x = []
-historical_data_y = []
-
 @app.route('/coins/<int:coin_id>')
 def coin_page(coin_id):
     coin_page = Coin.query.filter_by(id=coin_id).first_or_404()
@@ -165,6 +162,10 @@ def coin_page(coin_id):
                                                     days=7,interval='daily')
 
 
+
+    historical_data_x = []
+    historical_data_y = []
+    
     printer = pprint.PrettyPrinter()
 
     # printer.pprint(historical_data)
@@ -173,11 +174,42 @@ def coin_page(coin_id):
         historical_data_x.append(d[0])
         historical_data_y.append(d[1])
 
-    return render_template("coin_page.html", title="{}".format(coin_page.name),
-                           coin_page=coin_page,
-                           historical_data=historical_data)
+    x = historical_data_x
+    y = historical_data_y
+
+    fig = figure(plot_width=600, plot_height=600,
+                 x_axis_type="datetime")
+
+    fig.line(x,y)
 
 
+    js_resources = INLINE.render_js()
+    css_resources = INLINE.render_css()
+
+    
+    script, div = components(fig)
+    html = render_template(
+        'demo.html',
+        plot_script=script,
+        plot_div=div,
+        js_resources=js_resources,
+        css_resources=css_resources
+    )
+
+    # render html here
+    html = render_template(
+        "coin_page.html", 
+        title="{}".format(coin_page.name),
+        coin_page=coin_page,
+        historical_data=historical_data,
+        plot_script=script,
+        plot_div=div,
+        js_resources=js_resources,
+        css_resources=css_resources)
+    
+    return html
+
+'''
 @app.route('/bokeh')
 def bokeh():
     x = historical_data_x
@@ -203,7 +235,7 @@ def bokeh():
     )
     return (html)
 
-
+'''
 
 
 
