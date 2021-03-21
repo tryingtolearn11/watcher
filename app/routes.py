@@ -150,8 +150,8 @@ def follow(coin_id, action):
 @app.route('/coins/<int:coin_id>')
 def coin_page(coin_id):
     coin_page = Coin.query.filter_by(id=coin_id).first_or_404()
-    
-    historical_data = cg.get_coin_market_chart_by_id(id=coin_page.name.lower(), vs_currency='usd',
+    filtered_coin_name = coin_page.name.lower().replace(' ', '')
+    historical_data = cg.get_coin_market_chart_by_id(id=filtered_coin_name, vs_currency='usd',
                                                     days=7,interval='daily')
 
 
@@ -160,7 +160,9 @@ def coin_page(coin_id):
 
     printer.pprint(historical_data)
     print(type(historical_data))
-    return render_template("coin_page.html", title="{}".format(coin_page.name), coin_page=coin_page)
+    return render_template("coin_page.html", title="{}".format(coin_page.name),
+                           coin_page=coin_page,
+                           historical_data=historical_data)
 
 
 
