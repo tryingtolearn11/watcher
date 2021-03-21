@@ -6,7 +6,7 @@
 
 <p>{{ historical_data.get('prices') }}</p>
 <body>
-
+    <a href="{{url_for('bokeh') }}">GRAPH</a>
     {% for times in historical_data.get('prices') %}
         <p> {{ times[0] }} </p>
     {% endfor %}

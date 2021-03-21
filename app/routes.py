@@ -152,6 +152,11 @@ def follow(coin_id, action):
 
 
 
+# SOME TEST DATA
+
+historical_data_x = []
+historical_data_y = []
+
 @app.route('/coins/<int:coin_id>')
 def coin_page(coin_id):
     coin_page = Coin.query.filter_by(id=coin_id).first_or_404()
@@ -164,8 +169,9 @@ def coin_page(coin_id):
 
     # printer.pprint(historical_data)
     print(type(historical_data))
-
-
+    for d in historical_data.get('prices'):
+        historical_data_x.append(d[0])
+        historical_data_y.append(d[1])
 
     return render_template("coin_page.html", title="{}".format(coin_page.name),
                            coin_page=coin_page,
@@ -174,14 +180,13 @@ def coin_page(coin_id):
 
 @app.route('/bokeh')
 def bokeh():
-    fig = figure(plot_width=600, plot_height=600)
-    fig.vbar(
-        x=[1,2,3,4],
-        width=0.5,
-        bottom=0,
-        top=[1.7,2.2,4.6,3.9],
-        color='navy'
-    )
+    x = historical_data_x
+    y = historical_data_y
+
+    fig = figure(plot_width=600, plot_height=600,
+                 x_axis_type="datetime")
+
+    fig.line(x,y)
 
 
     js_resources = INLINE.render_js()
