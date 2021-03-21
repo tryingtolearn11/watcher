@@ -8,7 +8,12 @@ from pycoingecko import CoinGeckoAPI
 import pprint
 from sqlalchemy import desc, asc
 from jinja2 import Markup
-from collections import OrderedDict
+from bokeh.embed import components
+from bokeh.plotting import figure
+from bokeh.resources import INLINE
+
+
+
 
 
 # QUERIES AT EVERY INTERVAL
@@ -161,16 +166,38 @@ def coin_page(coin_id):
     print(type(historical_data))
 
 
-    
-
-
-
-
-
 
     return render_template("coin_page.html", title="{}".format(coin_page.name),
                            coin_page=coin_page,
                            historical_data=historical_data)
+
+
+@app.route('/bokeh')
+def bokeh():
+    fig = figure(plot_width=600, plot_height=600)
+    fig.vbar(
+        x=[1,2,3,4],
+        width=0.5,
+        bottom=0,
+        top=[1.7,2.2,4.6,3.9],
+        color='navy'
+    )
+
+
+    js_resources = INLINE.render_js()
+    css_resources = INLINE.render_css()
+
+    
+    script, div = components(fig)
+    html = render_template(
+        'demo.html',
+        plot_script=script,
+        plot_div=div,
+        js_resources=js_resources,
+        css_resources=css_resources
+    )
+    return (html)
+
 
 
 
