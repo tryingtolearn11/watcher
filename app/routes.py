@@ -106,38 +106,6 @@ def profile():
     return render_template("profile.html",title="Profile",followed_coins=followed_coins)
 
 
-# Jinja2 custom filter
-# TODO: WRITE CUSTOM FILTERS FOR FORMATTING CURRENCY, PERCENTAGES, NUMBERS
-# TODO: Move these filers into their own files and keep app.jinja_env in
-# __init__.py
-
-# Currency Formatter
-def currency_format(price):
-    return "${:,.2f}".format(price)
-
-
-# Number Formatter
-def number_format(number):
-    return '{:,}'.format(number)
-
-# Percent Color Formatter
-def percent_color_format(value):
-    s = str(value)
-    negative = "-"
-    if s == "None":
-        return " "
-    if  negative in s:
-        return Markup('<span style="color:red"> {} </span>'.format(s[:4]+"%"))
-    else:
-        return Markup('<span style="color:green"> {} </span>'.format(s[:4]+"%"))
-
-
-# FILTERS 
-app.jinja_env.filters['currency_format'] = currency_format
-app.jinja_env.filters['number_format'] = number_format
-app.jinja_env.filters['percent_color_format'] = percent_color_format
-
-
 
 
 @app.route('/coins')

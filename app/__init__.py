@@ -7,11 +7,13 @@ from pycoingecko import CoinGeckoAPI
 from sqlalchemy import MetaData
 from flask_apscheduler import APScheduler 
 from flask_bootstrap import Bootstrap
-
+from jinja2 import Markup
 
 app = Flask(__name__)
 app.config.from_object(Config)
 app.config.from_object(Config)
+
+
 
 
 login = LoginManager(app)
@@ -41,5 +43,27 @@ with app.app_context():
 
 
 
+
+# Filters
+def currency_format(price):
+    return "${:,.2f}".format(price)
+
+def number_format(number):
+    return '{:,}'.format(number)
+
+def percent_color_format(value):
+    s = str(value)
+    negative = "-"
+    if s == "None":
+        return " "
+    if negative in s:
+        return Markup('<span style="color:red"> {} </span>'.format(s[:4]+"%"))
+    else:
+        return Markup('<span style="color:green"> {} </span>'.format(s[:4]+"%"))
+
+# Jinja2 custom filters
+app.jinja_env.filters['currency_format'] = currency_format
+app.jinja_env.filters['number_format'] = number_format
+app.jinja_env.filters['percent_color_format'] = percent_color_format
 
 from app import routes, models
