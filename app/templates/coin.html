@@ -40,7 +40,7 @@
             {% endif %}
             
             <td>{{  k.market_cap_rank }}</td>
-            <td>{{  k.name }}</td>
+            <td><a href="{{url_for('coin_page', coin_id=k.id)}}">{{  k.name }}</a></td>
             <td><img src="{{k.image}}" alt="" border=3 width=20 height=20></img></td>
             <td><span style="text-transform:uppercase"> {{ k.symbol }} </span></td>
             <td>{{ k.current_price | currency_format() }}</td>

@@ -143,7 +143,10 @@ def follow(coin_id, action):
 
 
 
-
+@app.route('/coins/<int:coin_id>')
+def coin_page(coin_id):
+    coin_page = Coin.query.filter_by(id=coin_id).first_or_404()
+    return render_template("coin_page.html", title="{}".format(coin_page.name), coin_page=coin_page)
 
 
 

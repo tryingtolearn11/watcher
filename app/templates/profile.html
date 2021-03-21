@@ -12,6 +12,8 @@
             <th scope="col"> </th>
             <th scope="col"> # </th>
             <th scope="col">Coin </th>
+            <th scope="col"> </th>
+            <th scope="col"> </th>
             <th scope="col">Current Price </th>
             <th scope="col">Price Change 24h</th>
             <th scope="col">Price Change 7d </th>
@@ -26,7 +28,9 @@
                 <img src="{{url_for('static',filename='eyewatch2.png')}}"
                 alt="" border=5 width=25 height=15></img></a></div></td>
         <td>{{ c.market_cap_rank }}</td>
-        <td>{{ c.name }}</td>
+        <td><a href="{{url_for('coin_page', coin_id=c.id)}}">{{  c.name }}</a></td>
+        <td><img src="{{c.image}}" alt="" border=3 width=20 height=20></img></td>
+        <td><span style="text-transform:uppercase"> {{ c.symbol }} </span></td>
         <td>{{ c.current_price | currency_format() }}</td>
         <td>{{ c.price_change_24h | percent_color_format() }}</td>
         <td>{{ c.price_change_7d | percent_color_format() }}</td>
