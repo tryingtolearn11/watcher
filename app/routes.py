@@ -155,11 +155,19 @@ def coin_page(coin_id):
                                                     days=7,interval='daily')
 
 
-
     printer = pprint.PrettyPrinter()
 
-    printer.pprint(historical_data)
+    # printer.pprint(historical_data)
     print(type(historical_data))
+
+
+    
+
+
+
+
+
+
     return render_template("coin_page.html", title="{}".format(coin_page.name),
                            coin_page=coin_page,
                            historical_data=historical_data)

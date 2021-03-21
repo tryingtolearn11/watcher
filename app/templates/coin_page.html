@@ -4,7 +4,10 @@
 {% block content %}
 <h1> {{ coin_page.name }} </h1>
 
-<p>{{ historical_data }}</p>
+<p>{{ historical_data.get('prices') }}</p>
 
-
+<body>
+    {% for times in historical_data.get('prices') %}
+        <p> {{ times[0] }} </p>
+    {% endfor %}
 {% endblock %}
