@@ -6,6 +6,7 @@ from flask import render_template, redirect, url_for, flash, request
 from werkzeug.urls import url_parse
 from pycoingecko import CoinGeckoAPI
 import pprint
+import time
 from sqlalchemy import desc, asc
 from bokeh.embed import components
 from bokeh.plotting import figure
@@ -57,7 +58,10 @@ def job1():
                 db.session.commit()     
 
 
-@scheduler.task('interval', id='do_job_2', seconds=10)
+
+# TODO: Need a way to get data for coins into the db
+'''
+@scheduler.task('interval', id='do_job_2', seconds=70)
 def job2():
     with scheduler.app.app_context():
         print("Interval Job 2 Done")
@@ -67,12 +71,18 @@ def job2():
             filtered_coin_name = coin.name.lower().replace(' ', '')
             historical_data = cg.get_coin_market_chart_by_id(id=filtered_coin_name, 
                                                              vs_currency='usd', days=7,interval='daily')
-
+            print("now sleeping 40 secs")
+            time.sleep(40)
             # Store in db then sleep before next iteration
+            for times in historical_data:
+                setattr(coin,'historical_prices_7d_time',times[0])
+                setattr(coin,'historical_prices_7d_prices', times[1]) 
+                db.session.commit()
+                time.sleep(30)
+                print("added {} historical data to db - now sleeping".format(coin.name))
 
-            
 
-
+'''
 
 
 

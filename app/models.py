@@ -57,6 +57,7 @@ def load_user(id):
 # Coin Database Model
 class Coin(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    coin_id = db.Column(db.String(64))
     name = db.Column(db.String(64))
     symbol = db.Column(db.String(32))
     current_price = db.Column(db.Float)
@@ -67,8 +68,8 @@ class Coin(db.Model):
     image = db.Column(db.String(180))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     # Get historical data
-    historical_prices_7d_time = db.Column(db.DateTime)
-    historical_prices_7d_prices = db.Column(db.Float)
+    historical_prices_7d_time = db.Column(db.String(80))
+    historical_prices_7d_prices = db.Column(db.String(100))
 
     def __init__(self, name, symbol, current_price, market_cap_rank,
                  market_cap, price_change_24h, price_change_7d, image):
