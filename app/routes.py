@@ -7,7 +7,6 @@ from werkzeug.urls import url_parse
 from pycoingecko import CoinGeckoAPI
 import pprint
 from sqlalchemy import desc, asc
-from jinja2 import Markup
 from bokeh.embed import components
 from bokeh.plotting import figure
 from bokeh.resources import INLINE
@@ -20,7 +19,7 @@ from bokeh.resources import INLINE
 @scheduler.task('interval', id='do_job_1', seconds=300)
 def job1():
     with scheduler.app.app_context():
-        print("INTERVAL JOB DONE")
+        print("INTERVAL JOB 1 DONE")
         # Get a request from api
         printer = pprint.PrettyPrinter()
         data = cg.get_coins_markets(vs_currency='usd', order='market_cap_desc',
@@ -56,6 +55,38 @@ def job1():
                 setattr(new_coin, 'price_change_24h',data[i].get('price_change_percentage_24h'))
                 setattr(new_coin,'price_change_7d',data[i].get('price_change_percentage_7d_in_currency'))
                 db.session.commit()     
+
+
+@scheduler.task('interval', id='do_job_2', seconds=10)
+def job2():
+    with scheduler.app.app_context():
+        print("Interval Job 2 Done")
+        coin_list = Coin.query.all()
+        
+        for coin in coin_list:
+            filtered_coin_name = coin.name.lower().replace(' ', '')
+            historical_data = cg.get_coin_market_chart_by_id(id=filtered_coin_name, 
+                                                             vs_currency='usd', days=7,interval='daily')
+
+            # Store in db then sleep before next iteration
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
