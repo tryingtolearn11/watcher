@@ -66,7 +66,9 @@ class Coin(db.Model):
     price_change_7d = db.Column(db.Float)
     image = db.Column(db.String(180))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    
+    # Get historical data
+    historical_prices_7d_time = db.Column(db.DateTime)
+    historical_prices_7d_prices = db.Column(db.Float)
 
     def __init__(self, name, symbol, current_price, market_cap_rank,
                  market_cap, price_change_24h, price_change_7d, image):

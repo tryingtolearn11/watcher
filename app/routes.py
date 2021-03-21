@@ -21,6 +21,11 @@ def job1():
         data = cg.get_coins_markets(vs_currency='usd', order='market_cap_desc',
                                     per_page=250,
                                     price_change_percentage='24h,7d')
+
+
+
+
+
         
         # Much better request handling
         for i in range(len(data)):
@@ -114,9 +119,8 @@ def coins():
     COINS_PER_PAGE = 50 
     page = request.args.get('page', 1, type=int)
     # Sort and Paginate
+    printer = pprint.PrettyPrinter()
     coins = Coin.query.order_by(Coin.market_cap_rank.asc()).paginate(page, COINS_PER_PAGE, False)
-
-
     return render_template("coin.html", title="Coins",coins=coins)
 
    
@@ -146,6 +150,16 @@ def follow(coin_id, action):
 @app.route('/coins/<int:coin_id>')
 def coin_page(coin_id):
     coin_page = Coin.query.filter_by(id=coin_id).first_or_404()
+    
+    historical_data = cg.get_coin_market_chart_by_id(id=coin_page.name.lower(), vs_currency='usd',
+                                                    days=7,interval='daily')
+
+
+
+    printer = pprint.PrettyPrinter()
+
+    printer.pprint(historical_data)
+    print(type(historical_data))
     return render_template("coin_page.html", title="{}".format(coin_page.name), coin_page=coin_page)
 
 
