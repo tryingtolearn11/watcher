@@ -100,7 +100,10 @@ def register():
 @app.route('/profile')
 @login_required
 def profile():
-    return render_template("profile.html",title="Profile")
+    followed_coins = current_user.followed.all()
+    if len(followed_coins) == 0:
+        flash('You are not following any coins')
+    return render_template("profile.html",title="Profile",followed_coins=followed_coins)
 
 
 # Jinja2 custom filter
@@ -148,23 +151,6 @@ def coins():
 
     return render_template("coin.html", title="Coins",coins=coins)
 
-
-'''
-
-@app.route('/follow/<name>', methods=['POST'])
-def follow(name):
-    form=EmptyForm()
-    if form.validate_on_submit():
-        coin = Coin.query.filter_by(name=name).first()
-        print(coin)
-        if coin is None:
-            flash('Coin {} not found.'.format(name))
-            return redirect(url_for('coin'))
-        current_user.follow(coin)
-        db.session.commit()
-        flash('You are following {}'.format(name))
-        return redirect(url_for('index'))
-'''
    
 @app.route('/news')
 def news():

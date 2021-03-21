@@ -3,6 +3,38 @@
 
 {% block content %}
 <p>This will be the profile page {{current_user.username}}</p>
+<h2> Your Coins </h2>
+<table style="width:50%" class="table table-hover table-light text-center
+                        table-bordered" align="center" style="margin: 0px
+                                               auto;">
+    <thead>
+        <tr>
+            <th scope="col"> </th>
+            <th scope="col"> # </th>
+            <th scope="col">Coin </th>
+            <th scope="col">Current Price </th>
+            <th scope="col">Price Change 24h</th>
+            <th scope="col">Price Change 7d </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in followed_coins %}
+        <tr key = {{c.name}}></td>
+        <td>
+            <div class="follow_img">
+                <a href="{{url_for('follow', coin_id=c.id, action='unfollow')}}">
+                <img src="{{url_for('static',filename='eyewatch2.png')}}"
+                alt="" border=5 width=25 height=15></img></a></div></td>
+        <td>{{ c.market_cap_rank }}</td>
+        <td>{{ c.name }}</td>
+        <td>{{ c.current_price | currency_format() }}</td>
+        <td>{{ c.price_change_24h | percent_color_format() }}</td>
+        <td>{{ c.price_change_7d | percent_color_format() }}</td>
+        {% endfor %}
+        </tr>
+    </tbody>
+</table>
+
 
 
 {% endblock %}

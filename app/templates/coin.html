@@ -29,12 +29,12 @@
                 {% if current_user.is_following(k) %}
                 <a href="{{url_for('follow', coin_id=k.id, action='unfollow')}}">
                     <img src="{{ url_for('static', filename='eyewatch2.png')}}"
-                         alt="" border=3 width=20 height=10></img></a></div></td>
+                         alt="" border=3 width=25 height=15></img></a></div></td>
                 {% else %}
                 
                     <a href="{{url_for('follow', coin_id=k.id, action='follow')}}">
                     <img src="{{ url_for('static', filename='eyewatch3.png')}}"
-                         alt="" border=3 width=20 height=10></img></a></div>
+                         alt="" border=3 width=25 height=15></img></a></div>
                 </td>
              {% endif %} 
             {% endif %}
