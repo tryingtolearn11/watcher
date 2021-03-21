@@ -100,7 +100,7 @@ def register():
 @app.route('/profile')
 @login_required
 def profile():
-    followed_coins = current_user.followed.all()
+    followed_coins = current_user.followed.order_by(Coin.market_cap_rank.asc()).all()
     if len(followed_coins) == 0:
         flash('You are not following any coins')
     return render_template("profile.html",title="Profile",followed_coins=followed_coins)
