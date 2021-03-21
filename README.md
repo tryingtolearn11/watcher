@@ -8,6 +8,7 @@
 <li><s>Fix Ranking Bug</s></li>
 <li><s>Paginate Ranking Board</s></li>
 <li><s>Personalize App: Users can track specific coins</s></li>
+<li>ADD SEARCH BAR FOR COINS</li>
 <li>ADD NEWS SECTION</li>
 <li>ADD DASHBOARD</li>
 <li>ADD GRAPHS? </li>
