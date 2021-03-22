@@ -71,9 +71,10 @@ class Coin(db.Model):
     historical_prices_7d_time = db.Column(db.String(80))
     historical_prices_7d_prices = db.Column(db.String(100))
 
-    def __init__(self, name, symbol, current_price, market_cap_rank,
+    def __init__(self, name, coin_id, symbol, current_price, market_cap_rank,
                  market_cap, price_change_24h, price_change_7d, image):
         self.name = name
+        self.coin_id = coin_id
         self.symbol = symbol
         self.current_price = current_price
         self.market_cap_rank = market_cap_rank

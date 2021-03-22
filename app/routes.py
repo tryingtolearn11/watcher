@@ -17,7 +17,7 @@ from bokeh.resources import INLINE
 
 
 # QUERIES AT EVERY INTERVAL
-@scheduler.task('interval', id='do_job_1', seconds=300)
+@scheduler.task('interval', id='do_job_1', seconds=10)
 def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB 1 DONE")
@@ -38,7 +38,7 @@ def job1():
             new_coin = Coin.query.filter_by(name=data[i].get('name')).first()
 
             if new_coin is None:
-                new_coin = Coin(name=data[i].get('name'), symbol=data[i].get('symbol'),
+                new_coin = Coin(name=data[i].get('name'),coin_id=data[i].get('id'),symbol=data[i].get('symbol'),
                                 current_price=data[i].get('current_price'),
                                 market_cap_rank=data[i].get('market_cap_rank'),
                                 market_cap=data[i].get('market_cap'),
@@ -47,9 +47,11 @@ def job1():
                                 image=data[i].get('image'))
 
                 print("Added : ", new_coin)
+                print("{}".format(new_coin.coin_id))
                 db.session.add(new_coin)
                 db.session.commit()
             else:
+
                 setattr(new_coin, 'current_price', data[i].get('current_price')) 
                 setattr(new_coin, 'market_cap_rank',data[i].get('market_cap_rank')) 
                 setattr(new_coin, 'market_cap', data[i].get('market_cap'))
@@ -199,7 +201,8 @@ def follow(coin_id, action):
 def coin_page(coin_id):
     coin_page = Coin.query.filter_by(id=coin_id).first_or_404()
     filtered_coin_name = coin_page.name.lower().replace(' ', '')
-    historical_data = cg.get_coin_market_chart_by_id(id=filtered_coin_name, vs_currency='usd',
+    coin_id = coin_page.coin_id
+    historical_data = cg.get_coin_market_chart_by_id(id=coin_id, vs_currency='usd',
                                                     days=7,interval='daily')
 
 
