@@ -160,36 +160,37 @@ def profile():
     print(followed_coins[0].id)
 
     coin_page = followed_coins[0]
-    filtered_coin_name = coin_page.name.lower().replace(' ', '')
-    coin_id = coin_page.coin_id
-    historical_data = cg.get_coin_market_chart_by_id(id=coin_id, vs_currency='usd',
-                                                    days=7,interval='daily')
+    for i in range(len(followed_coins)):
+        coin_page = followed_coins[i]
+        print(coin_page.coin_id)
+        coin_id = coin_page.coin_id
+        historical_data = cg.get_coin_market_chart_by_id(id=coin_id, vs_currency='usd',
+                                                         days=7,interval='daily')
 
 
 
-    historical_data_x = []
-    historical_data_y = []
+        historical_data_x = []
+        historical_data_y = []
     
 
-    for d in historical_data.get('prices'):
-        historical_data_x.append(d[0])
-        historical_data_y.append(d[1])
+        for d in historical_data.get('prices'):
+            historical_data_x.append(d[0])
+            historical_data_y.append(d[1])
 
-    x = historical_data_x
-    y = historical_data_y
+        x = historical_data_x
+        y = historical_data_y
 
-    fig = figure(plot_width=200, plot_height=100,
-                 x_axis_type="datetime")
+        fig = figure(plot_width=200, plot_height=100,x_axis_type="datetime")
 
-    fig.line(x,y)
-    fig.toolbar_location = None
-    fig.toolbar.logo = None
+        fig.line(x,y)
+        fig.toolbar_location = None
+        fig.toolbar.logo = None
 
-    js_resources = INLINE.render_js()
-    css_resources = INLINE.render_css()
+        js_resources = INLINE.render_js()
+        css_resources = INLINE.render_css()
 
     
-    script, div = components(fig)
+        script, div = components(fig)
 
 
     return render_template(
