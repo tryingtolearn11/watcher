@@ -8,9 +8,9 @@ from pycoingecko import CoinGeckoAPI
 import pprint
 import time
 from sqlalchemy import desc, asc
-from bokeh.embed import components
+from bokeh.embed import components, file_html
 from bokeh.plotting import figure
-from bokeh.resources import INLINE
+from bokeh.resources import INLINE, CDN
 
 
 
@@ -74,14 +74,13 @@ def job2():
             historical_data = cg.get_coin_market_chart_by_id(id=filtered_coin_name, 
                                                              vs_currency='usd', days=7,interval='daily')
             print("now sleeping 40 secs")
-            time.sleep(40)
             # Store in db then sleep before next iteration
             for times in historical_data:
                 setattr(coin,'historical_prices_7d_time',times[0])
                 setattr(coin,'historical_prices_7d_prices', times[1]) 
                 db.session.commit()
-                time.sleep(30)
                 print("added {} historical data to db - now sleeping".format(coin.name))
+                time.sleep(30)
 
 
 
@@ -157,9 +156,12 @@ def profile():
     if len(followed_coins) == 0:
         flash('You are not following any coins')
     
-    print(followed_coins[0].id)
-
-    coin_page = followed_coins[0]
+    
+    js_resources = INLINE.render_js()
+    css_resources = INLINE.render_css()
+    # list to hold all plots
+    plots_list = []
+    # go through all followed coins
     for i in range(len(followed_coins)):
         coin_page = followed_coins[i]
         print(coin_page.coin_id)
@@ -172,6 +174,7 @@ def profile():
         historical_data_x = []
         historical_data_y = []
     
+        script, div = [], [] 
 
         for d in historical_data.get('prices'):
             historical_data_x.append(d[0])
@@ -180,33 +183,43 @@ def profile():
         x = historical_data_x
         y = historical_data_y
 
-        fig = figure(plot_width=200, plot_height=100,x_axis_type="datetime")
+       
+        plots_list.append(figure(plot_width=200,
+                                 plot_height=100,x_axis_type="datetime"))
 
-        fig.line(x,y)
+
+
+        plots_list[i].line(x,y)
         # Customize
-        fig.toolbar_location = None
-        fig.toolbar.logo = None
+        plots_list[i].toolbar_location = None
+        plots_list[i].toolbar.logo = None
         # Grid lines off
-        fig.xgrid.grid_line_color = None
-        fig.ygrid.grid_line_color = None
+        plots_list[i].xgrid.grid_line_color = None
+        plots_list[i].ygrid.grid_line_color = None
         # x y ticks
-        fig.xaxis.major_tick_line_color = None
-        fig.xaxis.minor_tick_line_color = None
+        plots_list[i].xaxis.major_tick_line_color = None
+        plots_list[i].xaxis.minor_tick_line_color = None
 
-        fig.yaxis.major_tick_line_color = None
-        fig.yaxis.minor_tick_line_color = None
+        plots_list[i].yaxis.major_tick_line_color = None
+        plots_list[i].yaxis.minor_tick_line_color = None
         # x  and  y values off 
-        fig.xaxis.major_label_text_font_size = '0pt'
-        fig.yaxis.major_label_text_font_size = '0pt'
+        plots_list[i].xaxis.major_label_text_font_size = '0pt'
+        plots_list[i].yaxis.major_label_text_font_size = '0pt'
 
-        fig.outline_line_color= None
+        plots_list[i].outline_line_color= None
 
 
         js_resources = INLINE.render_js()
         css_resources = INLINE.render_css()
+        #script[i], div[i] = components(plots_list[i])
+        script.append(components(plots_list[i]))
+        div.append(components(plots_list[i]))
 
-    
-        script, div = components(fig)
+
+        
+
+    print(len(followed_coins))
+    print(len(plots_list))
 
 
     return render_template(
@@ -216,7 +229,9 @@ def profile():
         plot_script=script,
         plot_div=div,
         js_resources=js_resources,
-        css_resources=css_resources)
+        css_resources=css_resources
+    )
+
 
 
 @app.route('/coins')
@@ -286,6 +301,25 @@ def coin_page(coin_id):
     fig.toolbar_location = None
     fig.toolbar.logo = None
 
+    fig.line(x,y)
+        # Customize
+    fig.toolbar_location = None
+    fig.toolbar.logo = None
+        # Grid lines off
+    fig.xgrid.grid_line_color = None
+
+    fig.ygrid.grid_line_color = None
+        # x y ticks
+    fig.xaxis.major_tick_line_color = None
+    fig.xaxis.minor_tick_line_color = None
+
+    fig.yaxis.major_tick_line_color = None
+    fig.yaxis.minor_tick_line_color = None
+        # x  and  y values off 
+    fig.xaxis.major_label_text_font_size = '0pt'
+    fig.yaxis.major_label_text_font_size = '0pt'
+
+    fig.outline_line_color= None
     js_resources = INLINE.render_js()
     css_resources = INLINE.render_css()
 

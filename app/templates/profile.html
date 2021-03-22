@@ -7,7 +7,7 @@
 
 {{ js_resources | indent(4)|safe }}
 {{ css_resources|indent(4)|safe }}
-{{ plot_script|indent(4)|safe }}
+
 
 
 
@@ -43,7 +43,9 @@
         <td>{{ c.current_price | currency_format() }}</td>
         <td>{{ c.price_change_24h | percent_color_format() }}</td>
         <td>{{ c.price_change_7d | percent_color_format() }}</td>
-        <td>{{ plot_div|indent(4)|safe }}</td>
+        <td>{{ plot_script|indent(4)|safe }} 
+            {{ plot_div|indent(4)|safe }}   
+        </td>
         {% endfor %}
         </tr>
     </tbody>
