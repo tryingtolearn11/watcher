@@ -62,8 +62,8 @@ def job1():
 
 
 # TODO: Need a way to get data for coins into the db
-'''
-@scheduler.task('interval', id='do_job_2', seconds=70)
+
+@scheduler.task('interval', id='do_job_2', seconds=1000)
 def job2():
     with scheduler.app.app_context():
         print("Interval Job 2 Done")
@@ -84,7 +84,7 @@ def job2():
                 print("added {} historical data to db - now sleeping".format(coin.name))
 
 
-'''
+
 
 
 
@@ -183,8 +183,24 @@ def profile():
         fig = figure(plot_width=200, plot_height=100,x_axis_type="datetime")
 
         fig.line(x,y)
+        # Customize
         fig.toolbar_location = None
         fig.toolbar.logo = None
+        # Grid lines off
+        fig.xgrid.grid_line_color = None
+        fig.ygrid.grid_line_color = None
+        # x y ticks
+        fig.xaxis.major_tick_line_color = None
+        fig.xaxis.minor_tick_line_color = None
+
+        fig.yaxis.major_tick_line_color = None
+        fig.yaxis.minor_tick_line_color = None
+        # x  and  y values off 
+        fig.xaxis.major_label_text_font_size = '0pt'
+        fig.yaxis.major_label_text_font_size = '0pt'
+
+        fig.outline_line_color= None
+
 
         js_resources = INLINE.render_js()
         css_resources = INLINE.render_css()
