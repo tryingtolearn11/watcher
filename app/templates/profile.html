@@ -5,8 +5,6 @@
 <p>This will be the profile page {{current_user.username}}</p>
 
 
-{{ js_resources | indent(4)|safe }}
-{{ css_resources|indent(4)|safe }}
 
 
 
@@ -43,15 +41,6 @@
         <td>{{ c.current_price | currency_format() }}</td>
         <td>{{ c.price_change_24h | percent_color_format() }}</td>
         <td>{{ c.price_change_7d | percent_color_format() }}</td>
-        {% for script in plot_script %}
-        {% for div in plot_div %}
-        <td>{{ script| safe }} 
-            {{ div | safe }}   
-            {{ js_resources | indent(4)|safe }}
-            {{ css_resources|indent(4)|safe }}
-        </td>
-        {% endfor %}
-        {% endfor %}
         {% endfor %}
         </tr>
     </tbody>

@@ -149,6 +149,24 @@ def register():
 
 
 
+
+
+
+def profile_plots(followed_coins):
+    plots = []
+    x = [0, 1, 2, 3, 4, 5]
+    y = [2, 4, 6, 8, 10, 12]
+    for i in range(len(followed_coins)):
+        p = figure(plot_width=200, plot_height=100, x_axis_type="datetime")
+        p.line(x,y)
+        plots.append(p)
+    return plots
+
+
+
+
+
+
 @app.route('/profile')
 @login_required
 def profile():
@@ -157,8 +175,6 @@ def profile():
         flash('You are not following any coins')
     
     
-    js_resources = INLINE.render_js()
-    css_resources = INLINE.render_css()
     # list to hold all plots
     plots_list = []
     # go through all followed coins
@@ -168,69 +184,19 @@ def profile():
         coin_id = coin_page.coin_id
         historical_data = cg.get_coin_market_chart_by_id(id=coin_id, vs_currency='usd',
                                                          days=7,interval='daily')
-
-
-
-        historical_data_x = []
-        historical_data_y = []
     
-        script, div = [], [] 
-
-        for d in historical_data.get('prices'):
-            historical_data_x.append(d[0])
-            historical_data_y.append(d[1])
-
-        x = historical_data_x
-        y = historical_data_y
-
+    print("followed_coins size :",len(followed_coins))
+    plots = profile_plots(followed_coins)
+    print("plots size :",len(plots))
        
-        plots_list.append(figure(plot_width=200,
-                                 plot_height=100,x_axis_type="datetime"))
-
-
-
-        plots_list[i].line(x,y)
-        # Customize
-        plots_list[i].toolbar_location = None
-        plots_list[i].toolbar.logo = None
-        # Grid lines off
-        plots_list[i].xgrid.grid_line_color = None
-        plots_list[i].ygrid.grid_line_color = None
-        # x y ticks
-        plots_list[i].xaxis.major_tick_line_color = None
-        plots_list[i].xaxis.minor_tick_line_color = None
-
-        plots_list[i].yaxis.major_tick_line_color = None
-        plots_list[i].yaxis.minor_tick_line_color = None
-        # x  and  y values off 
-        plots_list[i].xaxis.major_label_text_font_size = '0pt'
-        plots_list[i].yaxis.major_label_text_font_size = '0pt'
-
-        plots_list[i].outline_line_color= None
-
-
-        js_resources = INLINE.render_js()
-        css_resources = INLINE.render_css()
-        #script[i], div[i] = components(plots_list[i])
-        script.append(components(plots_list[i]))
-        div.append(components(plots_list[i]))
-
-
-        
-
-    print(len(followed_coins))
-    print(len(plots_list))
+       # plots_list.append(figure(plot_width=200,
+       #                         plot_height=100,x_axis_type="datetime"))
 
 
     return render_template(
         "profile.html",
         title="Profile",
-        followed_coins=followed_coins,
-        plot_script=script,
-        plot_div=div,
-        js_resources=js_resources,
-        css_resources=css_resources
-    )
+        followed_coins=followed_coins)
 
 
 
