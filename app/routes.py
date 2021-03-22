@@ -199,9 +199,9 @@ def profile():
         div.append(components(plots[i]))
     print("len of script = ", len(script))
     print("len of div = ", len(div))
-    print(script)
     js_resources = INLINE.render_js()
     css_resources = INLINE.render_css()
+    script, div = components(plots[1])
     return render_template(
         "profile.html",
         title="Profile",
