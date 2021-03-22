@@ -7,15 +7,11 @@
 {{ js_resources | indent(4)|safe }}
 {{ css_resources|indent(4)|safe }}
 {{ plot_script|indent(4)|safe }}
-<div>
-{{ plot_div|indent(4)|safe }}
-</div>
 
 
 
 <body>
-
-<p>{{ historical_data.get('prices') }}</p>
+{{ plot_div|indent(4)|safe }}
 </body>
 {% endblock %}
 
