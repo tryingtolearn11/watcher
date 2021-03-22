@@ -17,7 +17,7 @@ from bokeh.resources import INLINE
 
 
 # QUERIES AT EVERY INTERVAL
-@scheduler.task('interval', id='do_job_1', seconds=10)
+@scheduler.task('interval', id='do_job_1', seconds=300)
 def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB 1 DONE")
@@ -156,9 +156,50 @@ def profile():
     followed_coins = current_user.followed.order_by(Coin.market_cap_rank.asc()).all()
     if len(followed_coins) == 0:
         flash('You are not following any coins')
-    return render_template("profile.html",title="Profile",followed_coins=followed_coins)
+    
+    print(followed_coins[0].id)
+
+    coin_page = followed_coins[0]
+    filtered_coin_name = coin_page.name.lower().replace(' ', '')
+    coin_id = coin_page.coin_id
+    historical_data = cg.get_coin_market_chart_by_id(id=coin_id, vs_currency='usd',
+                                                    days=7,interval='daily')
 
 
+
+    historical_data_x = []
+    historical_data_y = []
+    
+
+    for d in historical_data.get('prices'):
+        historical_data_x.append(d[0])
+        historical_data_y.append(d[1])
+
+    x = historical_data_x
+    y = historical_data_y
+
+    fig = figure(plot_width=200, plot_height=100,
+                 x_axis_type="datetime")
+
+    fig.line(x,y)
+    fig.toolbar_location = None
+    fig.toolbar.logo = None
+
+    js_resources = INLINE.render_js()
+    css_resources = INLINE.render_css()
+
+    
+    script, div = components(fig)
+
+
+    return render_template(
+        "profile.html",
+        title="Profile",
+        followed_coins=followed_coins,
+        plot_script=script,
+        plot_div=div,
+        js_resources=js_resources,
+        css_resources=css_resources)
 
 
 @app.route('/coins')
@@ -221,24 +262,18 @@ def coin_page(coin_id):
     x = historical_data_x
     y = historical_data_y
 
-    fig = figure(plot_width=600, plot_height=600,
+    fig = figure(plot_width=200, plot_height=100,
                  x_axis_type="datetime")
 
     fig.line(x,y)
-
+    fig.toolbar_location = None
+    fig.toolbar.logo = None
 
     js_resources = INLINE.render_js()
     css_resources = INLINE.render_css()
 
     
     script, div = components(fig)
-    html = render_template(
-        'demo.html',
-        plot_script=script,
-        plot_div=div,
-        js_resources=js_resources,
-        css_resources=css_resources
-    )
 
     # render html here
     html = render_template(
