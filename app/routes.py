@@ -192,22 +192,23 @@ def profile():
        # plots_list.append(figure(plot_width=200,
        #                         plot_height=100,x_axis_type="datetime"))
     
-    script = []
-    div = []
+    box = []
+    #script = [0] * len(plots)
+    #div = [0] * len(plots)
     for i in range(len(plots)):
-        script.append(components(plots[i]))
-        div.append(components(plots[i]))
-    print("len of script = ", len(script))
-    print("len of div = ", len(div))
+        script, div = components(plots[i])
+        box.append(script)
+        box.append(div)
+
+
+
     js_resources = INLINE.render_js()
     css_resources = INLINE.render_css()
-    script, div = components(plots[1])
     return render_template(
         "profile.html",
         title="Profile",
         followed_coins=followed_coins,
-        script=script,
-        div=div,
+        box=box,
         js_resources=js_resources,
         css_resources=css_resources)
 
