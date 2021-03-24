@@ -180,7 +180,7 @@ def profile():
     # go through all followed coins
     for i in range(len(followed_coins)):
         coin_page = followed_coins[i]
-        print(coin_page.coin_id)
+     #   print(coin_page.coin_id)
         coin_id = coin_page.coin_id
        # historical_data = cg.get_coin_market_chart_by_id(id=coin_id, vs_currency='usd',
        #                                                  days=7,interval='daily')
@@ -199,9 +199,15 @@ def profile():
         # Key = Name of Coin and Value  = plot 
         plots['{}'.format(followed_coins[i].name)] = p
 
-    print(plots)
+    #print(plots)
 
     script, div = components(plots) 
+
+    #print(div)
+
+    for c in followed_coins:
+        if c.name in div:
+            print("FOUND :", c.name)
 
 
     js_resources = INLINE.render_js()
