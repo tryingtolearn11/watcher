@@ -41,7 +41,9 @@
         <td>{{ c.current_price | currency_format() }}</td>
         <td>{{ c.price_change_24h | percent_color_format() }}</td>
         <td>{{ c.price_change_7d | percent_color_format() }}</td>
-        <td>{{ div | safe }}</td>
+        {% if c.name in div %}
+        <td>{{ div[c.name] | safe }}</td>
+        {% endif %}
         {% endfor %}
         </tr>
     </tbody>
