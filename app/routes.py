@@ -151,20 +151,6 @@ def register():
 
 
 
-'''
-def profile_plots(followed_coins):
-    plots = []
-    x = [0, 1, 2, 3, 4, 5]
-    y = [2, 4, 6, 8, 10, 12]
-    for i in range(len(followed_coins)):
-        p = figure(plot_width=200, plot_height=100, x_axis_type="datetime")
-        p.line(x,y)
-        plots.append(p)
-    return plots
-'''
-
-
-
 
 
 @app.route('/profile')
@@ -174,26 +160,28 @@ def profile():
     if len(followed_coins) == 0:
         flash('You are not following any coins')
     
+    all_x_data = {}    
+    all_y_data = {}    
     
-    # list to hold all plots
-    plots_list = []
+    # store plots in dict 
+    plots = {}
     # go through all followed coins
     for i in range(len(followed_coins)):
         coin_page = followed_coins[i]
      #   print(coin_page.coin_id)
         coin_id = coin_page.coin_id
-       # historical_data = cg.get_coin_market_chart_by_id(id=coin_id, vs_currency='usd',
-       #                                                  days=7,interval='daily')
-    
-   # plots = profile_plots(followed_coins)
-       
-       # plots_list.append(figure(plot_width=200,
-       #                         plot_height=100,x_axis_type="datetime"))
-    
-    plots = {}
-    x = [0, 1, 2, 3, 4, 5]
-    y = [2, 4, 6, 8, 10, 12]
-    for i in range(len(followed_coins)):
+        historical_data = cg.get_coin_market_chart_by_id(id=coin_id, vs_currency='usd',
+                                                         days=7,interval='daily')
+        # Store all x , y data : x = key (COIN) : Value (Time)
+        # y = key(COIN) : VALUE(Price)
+        x = [t[0] for t in historical_data.get('prices')]
+        all_x_data['{}'.format(coin_id)] = x
+        
+        y = [p[1] for p in historical_data.get('prices')]
+        all_y_data['{}'.format(coin_id)] = y
+
+        x = all_x_data.get('{}'.format(coin_id))
+        y = all_y_data.get('{}'.format(coin_id))
         p = figure(plot_width=200, plot_height=100, x_axis_type="datetime")
         p.line(x,y)
         # Key = Name of Coin and Value  = plot 
