@@ -151,7 +151,9 @@ def register():
 
 
 
-
+# TODO: NEED TO STORE HISTORICAL DATA INTO DB TO PREVENT OVERLOADING GET
+# REQUESTS!
+# TODO: CLEAN THIS UP AND SEE TO OPTIMIZE RUNTIME, ETC
 
 @app.route('/profile')
 @login_required
