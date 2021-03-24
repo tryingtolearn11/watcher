@@ -151,7 +151,7 @@ def register():
 
 
 
-
+'''
 def profile_plots(followed_coins):
     plots = []
     x = [0, 1, 2, 3, 4, 5]
@@ -161,7 +161,7 @@ def profile_plots(followed_coins):
         p.line(x,y)
         plots.append(p)
     return plots
-
+'''
 
 
 
@@ -182,24 +182,26 @@ def profile():
         coin_page = followed_coins[i]
         print(coin_page.coin_id)
         coin_id = coin_page.coin_id
-        historical_data = cg.get_coin_market_chart_by_id(id=coin_id, vs_currency='usd',
-                                                         days=7,interval='daily')
+       # historical_data = cg.get_coin_market_chart_by_id(id=coin_id, vs_currency='usd',
+       #                                                  days=7,interval='daily')
     
-    print("followed_coins size :",len(followed_coins))
-    plots = profile_plots(followed_coins)
-    print("plots size :",len(plots))
+   # plots = profile_plots(followed_coins)
        
        # plots_list.append(figure(plot_width=200,
        #                         plot_height=100,x_axis_type="datetime"))
     
-    box = []
-    #script = [0] * len(plots)
-    #div = [0] * len(plots)
-    for i in range(len(plots)):
-        script, div = components(plots[i])
-        box.append(script)
-        box.append(div)
+    plots = {}
+    x = [0, 1, 2, 3, 4, 5]
+    y = [2, 4, 6, 8, 10, 12]
+    for i in range(len(followed_coins)):
+        p = figure(plot_width=200, plot_height=100, x_axis_type="datetime")
+        p.line(x,y)
+        # Key = Name of Coin and Value  = plot 
+        plots['{}'.format(followed_coins[i].name)] = p
 
+    print(plots)
+
+    script, div = components(plots) 
 
 
     js_resources = INLINE.render_js()
@@ -208,7 +210,8 @@ def profile():
         "profile.html",
         title="Profile",
         followed_coins=followed_coins,
-        box=box,
+        script=script,
+        div=div,
         js_resources=js_resources,
         css_resources=css_resources)
 
