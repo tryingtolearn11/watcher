@@ -263,8 +263,6 @@ def follow(coin_id, action):
 
 
 
-# SOME TEST DATA
-
 @app.route('/coins/<int:coin_id>')
 def coin_page(coin_id):
     coin_page = Coin.query.filter_by(id=coin_id).first_or_404()
@@ -278,9 +276,7 @@ def coin_page(coin_id):
     historical_data_x = []
     historical_data_y = []
     
-    printer = pprint.PrettyPrinter()
 
-    # printer.pprint(historical_data)
     print(type(historical_data))
     for d in historical_data.get('prices'):
         historical_data_x.append(d[0])
@@ -293,17 +289,6 @@ def coin_page(coin_id):
                  x_axis_type="datetime")
 
     fig.line(x,y)
-    fig.toolbar_location = None
-    fig.toolbar.logo = None
-
-    fig.line(x,y)
-        # Customize
-    fig.toolbar_location = None
-    fig.toolbar.logo = None
-        # Grid lines off
-    fig.xgrid.grid_line_color = None
-
-    fig.ygrid.grid_line_color = None
     
     js_resources = INLINE.render_js()
     css_resources = INLINE.render_css()
