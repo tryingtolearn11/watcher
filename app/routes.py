@@ -170,10 +170,12 @@ def profile():
     # go through all followed coins
     for i in range(len(followed_coins)):
         coin_page = followed_coins[i]
-     #   print(coin_page.coin_id)
         coin_id = coin_page.coin_id
+        # Get the historical date by coin id
         historical_data = cg.get_coin_market_chart_by_id(id=coin_id, vs_currency='usd',
                                                          days=7,interval='daily')
+        
+
         # Store all x , y data : x = key (COIN) : Value (Time)
         # y = key(COIN) : VALUE(Price)
         x = [t[0] for t in historical_data.get('prices')]
@@ -186,6 +188,32 @@ def profile():
         y = all_y_data.get('{}'.format(coin_id))
         p = figure(plot_width=200, plot_height=100, x_axis_type="datetime")
         p.line(x,y)
+
+        # Clean up the graph - remove excess info
+        p.toolbar_location = None
+        p.toolbar.logo = None
+
+        # Customize
+        p.toolbar_location = None
+        p.toolbar.logo = None
+        # Grid lines off
+        p.xgrid.grid_line_color = None
+
+        p.ygrid.grid_line_color = None
+        # x y ticks
+        p.xaxis.major_tick_line_color = None
+        p.xaxis.minor_tick_line_color = None
+
+        p.yaxis.major_tick_line_color = None
+        p.yaxis.minor_tick_line_color = None
+        # x  and  y values off 
+        p.xaxis.major_label_text_font_size = '0pt'
+        p.yaxis.major_label_text_font_size = '0pt'
+
+        p.outline_line_color= None
+
+
+
         # Key = Name of Coin and Value  = plot 
         plots['{}'.format(followed_coins[i].name)] = p
 
