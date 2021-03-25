@@ -89,18 +89,6 @@ def job2():
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 # pycoingecko
 cg = CoinGeckoAPI()
 
@@ -335,49 +323,6 @@ def coin_page(coin_id):
         css_resources=css_resources)
     
     return html
-
-'''
-@app.route('/bokeh')
-def bokeh():
-    x = historical_data_x
-    y = historical_data_y
-
-    fig = figure(plot_width=600, plot_height=600,
-                 x_axis_type="datetime")
-
-    fig.line(x,y)
-
-
-    js_resources = INLINE.render_js()
-    css_resources = INLINE.render_css()
-
-    
-    script, div = components(fig)
-    html = render_template(
-        'demo.html',
-        plot_script=script,
-        plot_div=div,
-        js_resources=js_resources,
-        css_resources=css_resources
-    )
-    return (html)
-
-'''
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
