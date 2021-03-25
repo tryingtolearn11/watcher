@@ -13,8 +13,8 @@
 <body>
 {{ plot_div|indent(4)|safe }}
 
-{{coin_page.market_cap_rank}}
-{{coin_page.current_price}}
+<p>Rank # {{coin_page.market_cap_rank}}</p>
+<p>Current Price {{coin_page.current_price | currency_format()}}
 </body>
 {% endblock %}
 
