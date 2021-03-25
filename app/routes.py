@@ -301,7 +301,7 @@ def coin_page(coin_id):
     x = historical_data_x
     y = historical_data_y
 
-    fig = figure(plot_width=200, plot_height=100,
+    fig = figure(plot_width=600, plot_height=500,
                  x_axis_type="datetime")
 
     fig.line(x,y)
@@ -316,17 +316,7 @@ def coin_page(coin_id):
     fig.xgrid.grid_line_color = None
 
     fig.ygrid.grid_line_color = None
-        # x y ticks
-    fig.xaxis.major_tick_line_color = None
-    fig.xaxis.minor_tick_line_color = None
-
-    fig.yaxis.major_tick_line_color = None
-    fig.yaxis.minor_tick_line_color = None
-        # x  and  y values off 
-    fig.xaxis.major_label_text_font_size = '0pt'
-    fig.yaxis.major_label_text_font_size = '0pt'
-
-    fig.outline_line_color= None
+    
     js_resources = INLINE.render_js()
     css_resources = INLINE.render_css()
 
