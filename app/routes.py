@@ -206,8 +206,13 @@ def profile():
         plots['{}'.format(followed_coins[i].name)] = p
 
     #print(plots)
+    if len(plots) != 0:
+        script, div = components(plots)
 
-    script, div = components(plots) 
+    # Condition for when user follows no coins
+    else:
+        script = ""
+        div = ""
 
     #print(div)
 
