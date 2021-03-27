@@ -58,7 +58,7 @@ def job1():
 
 # TODO: Need a way to get data for coins into the db
 
-@scheduler.task('interval', id='do_job_2', seconds=1000)
+@scheduler.task('interval', id='do_job_2', seconds=900)
 def job2():
     with scheduler.app.app_context():
         print("Interval Job 2 Done")
@@ -68,14 +68,14 @@ def job2():
             filtered_coin_name = coin.name.lower().replace(' ', '')
             historical_data = cg.get_coin_market_chart_by_id(id=filtered_coin_name, 
                                                              vs_currency='usd', days=7,interval='daily')
-            print("now sleeping 40 secs")
             # Store in db then sleep before next iteration
-            for times in historical_data:
-                setattr(coin,'historical_prices_7d_time',times[0])
-                setattr(coin,'historical_prices_7d_prices', times[1]) 
-                db.session.commit()
-                print("added {} historical data to db - now sleeping".format(coin.name))
-                time.sleep(30)
+            x = [t[0] for t in historical_data.get('prices')]
+            y = [p[1] for p in historical_data.get('prices')]
+            setattr(coin,'historical_prices_7d_time', x) 
+            setattr(coin,'historical_prices_7d_prices', y)
+            db.session.commit()
+            print("added {} historical data to db - now sleeping".format(coin.name))
+            time.sleep(30)
 
 
 
@@ -136,8 +136,7 @@ def register():
 
 # TODO: NEED TO STORE HISTORICAL DATA INTO DB TO PREVENT OVERLOADING GET
 # REQUESTS!
-# TODO: CLEAN THIS UP AND SEE TO OPTIMIZE RUNTIME, ETC
-
+# TODO: CREATE DB TABLE TO STORE HISTORICAL VALUES FOR EACH COIN
 @app.route('/profile')
 @login_required
 def profile():
@@ -166,6 +165,7 @@ def profile():
         
         y = [p[1] for p in historical_data.get('prices')]
         all_y_data['{}'.format(coin_id)] = y
+
 
         x = all_x_data.get('{}'.format(coin_id))
         y = all_y_data.get('{}'.format(coin_id))
@@ -266,28 +266,15 @@ def follow(coin_id, action):
 @app.route('/coins/<int:coin_id>')
 def coin_page(coin_id):
     coin_page = Coin.query.filter_by(id=coin_id).first_or_404()
-    filtered_coin_name = coin_page.name.lower().replace(' ', '')
     coin_id = coin_page.coin_id
-    #historical_data = cg.get_coin_market_chart_by_id(id=coin_id, vs_currency='usd',
-    #                                                days=7,interval='daily')
+    historical_data = cg.get_coin_market_chart_by_id(id=coin_id, vs_currency='usd',
+                                                    days=7,interval='daily')
 
 
-
-    historical_data_x = coin_page.historical_prices_7d_time
-    print(coin_page.historical_prices_7d_time)
-    historical_data_y = coin_page.historical_prices_7d_prices
     
-    '''
-    print(type(historical_data))
-    for d in historical_data.get('prices'):
-        historical_data_x.append(d[0])
-        historical_data_y.append(d[1])
-    '''
-    if historical_data_x or historical_data_y is None:
-        x, y = 0, 0
-    else:
-        x = historical_data_x
-        y = historical_data_y
+    x = [t[0] for t in historical_data.get('prices')]
+    y = [p[1] for p in historical_data.get('prices')]
+    
 
     fig = figure(plot_width=600, plot_height=500,
                  x_axis_type="datetime")

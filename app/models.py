@@ -53,7 +53,7 @@ def load_user(id):
     return User.query.get(int(id))
 
 
-
+# TODO: Create the db table for coin historical data
 # Coin Database Model
 class Coin(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -72,7 +72,7 @@ class Coin(db.Model):
     historical_prices_7d_prices = db.Column(db.String(100))
 
     def __init__(self, name, coin_id, symbol, current_price, market_cap_rank,
-                 market_cap, price_change_24h, price_change_7d, image):
+                 market_cap, price_change_24h, price_change_7d,image):
         self.name = name
         self.coin_id = coin_id
         self.symbol = symbol
@@ -82,6 +82,8 @@ class Coin(db.Model):
         self.price_change_24h = price_change_24h 
         self.price_change_7d = price_change_7d
         self.image = image
+        self.historical_prices_7d_time = historical_prices_7d_time
+        self.historical_prices_7d_prices = historical_prices_7d_prices
 
     def __repr__(self):
         return '<Coin {}, Symbol {}, Price {}, MarketCap Rank {}>'.format(self.name, self.symbol,
