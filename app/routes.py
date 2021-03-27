@@ -15,7 +15,6 @@ from bokeh.resources import INLINE, CDN
 
 
 
-
 # QUERIES AT EVERY INTERVAL
 @scheduler.task('interval', id='do_job_1', seconds=300)
 def job1():
@@ -29,12 +28,8 @@ def job1():
 
 
 
-
-
-        
         # Much better request handling
         for i in range(len(data)):
-            #printer.pprint(data[i].get('price_change_percentage_7d_in_currency'))
             new_coin = Coin.query.filter_by(name=data[i].get('name')).first()
 
             if new_coin is None:
@@ -249,7 +244,7 @@ def coins():
 def news():
     return redirect(url_for('index'))
 
-
+# Follow coins/ unfollow
 @app.route('/follow/<int:coin_id>/<action>')
 @login_required
 def follow(coin_id, action):
@@ -273,22 +268,26 @@ def coin_page(coin_id):
     coin_page = Coin.query.filter_by(id=coin_id).first_or_404()
     filtered_coin_name = coin_page.name.lower().replace(' ', '')
     coin_id = coin_page.coin_id
-    historical_data = cg.get_coin_market_chart_by_id(id=coin_id, vs_currency='usd',
-                                                    days=7,interval='daily')
+    #historical_data = cg.get_coin_market_chart_by_id(id=coin_id, vs_currency='usd',
+    #                                                days=7,interval='daily')
 
 
 
-    historical_data_x = []
-    historical_data_y = []
+    historical_data_x = coin_page.historical_prices_7d_time
+    print(coin_page.historical_prices_7d_time)
+    historical_data_y = coin_page.historical_prices_7d_prices
     
-
+    '''
     print(type(historical_data))
     for d in historical_data.get('prices'):
         historical_data_x.append(d[0])
         historical_data_y.append(d[1])
-
-    x = historical_data_x
-    y = historical_data_y
+    '''
+    if historical_data_x or historical_data_y is None:
+        x, y = 0, 0
+    else:
+        x = historical_data_x
+        y = historical_data_y
 
     fig = figure(plot_width=600, plot_height=500,
                  x_axis_type="datetime")
@@ -306,7 +305,6 @@ def coin_page(coin_id):
         "coin_page.html", 
         title="{}".format(coin_page.name),
         coin_page=coin_page,
-        historical_data=historical_data,
         plot_script=script,
         plot_div=div,
         js_resources=js_resources,
