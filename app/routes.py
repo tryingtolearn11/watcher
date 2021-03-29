@@ -133,25 +133,21 @@ def profile():
     # go through all followed coins
     for i in range(len(followed_coins)):
         coin_page = followed_coins[i]
-        coin_id = coin_page.coin_id
-        # Get the historical date by coin id
-        historical_data = cg.get_coin_market_chart_by_id(id=coin_id, vs_currency='usd',
-                                                         days=7,interval='daily')
-        
+        # Get the historical date by coin id from db
+        data = coin_page.data.all()
+        x = [int(i.x) for i in data]
+        y = [float(j.y) for j in data]
 
-        # Store all x , y data : x = key (COIN) : Value (Time)
-        # y = key(COIN) : VALUE(Price)
-        x = [t[0] for t in historical_data.get('prices')]
-        all_x_data['{}'.format(coin_id)] = x
-        
-        y = [p[1] for p in historical_data.get('prices')]
-        all_y_data['{}'.format(coin_id)] = y
+        # Store seperated data by name and by x/y axis
+        all_x_data['{}'.format(coin_page.name)] = x
+        all_y_data['{}'.format(coin_page.name)] = y
 
 
-        x = all_x_data.get('{}'.format(coin_id))
-        y = all_y_data.get('{}'.format(coin_id))
+        times = all_x_data.get('{}'.format(coin_page.name))
+        prices = all_y_data.get('{}'.format(coin_page.name))
+        # Plot data
         p = figure(plot_width=200, plot_height=100, x_axis_type="datetime")
-        p.line(x,y)
+        p.line(times,prices)
 
         # Clean up the graph - remove excess info
         p.toolbar_location = None
@@ -181,7 +177,7 @@ def profile():
         # Key = Name of Coin and Value  = plot 
         plots['{}'.format(followed_coins[i].name)] = p
 
-    #print(plots)
+    print("Plots : ", plots)
     if len(plots) != 0:
         script, div = components(plots)
 
@@ -270,11 +266,14 @@ def coin_page(coin_id):
             p = Point(x=x[k], y=y[k], parent=coin_page)
             db.session.add(p)
         else:
+            # TODO: BUG HERE : Updated Coins no longer are graphed!
             # Else update existing!
             for p in data:
+                '''
                 setattr(p, 'x', x[k])
                 setattr(p, 'y', y[k])
-                print("updated points")
+                '''
+                print("updated points", p.x, "-> ", x[k])
 
     
     data = coin_page.data.all()
