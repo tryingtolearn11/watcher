@@ -101,7 +101,7 @@ class Point(db.Model):
 
 
     def __repr__(self):
-        return '<Point {}, {}>'.format(self.x, self.y)
+        return '<Point {}, {}, Parent = {}>'.format(self.x, self.y, self.parent)
 
     
 
