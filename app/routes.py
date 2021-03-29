@@ -1,5 +1,5 @@
 from app import app, db, scheduler
-from app.models import Coin, User
+from app.models import Coin, User, Point
 from app.forms import LoginForm, RegistrationForm, EmptyForm
 from flask_login import current_user, login_user, logout_user, login_required
 from flask import render_template, redirect, url_for, flash, request
@@ -33,7 +33,7 @@ def job1():
             new_coin = Coin.query.filter_by(name=data[i].get('name')).first()
 
             if new_coin is None:
-                new_coin = Coin(name=data[i].get('name'),coin_id_name=data[i].get('id'),symbol=data[i].get('symbol'),
+                new_coin = Coin(name=data[i].get('name'), coin_id=data[i].get('id'),symbol=data[i].get('symbol'),
                                 current_price=data[i].get('current_price'),
                                 market_cap_rank=data[i].get('market_cap_rank'),
                                 market_cap=data[i].get('market_cap'),
@@ -133,7 +133,7 @@ def profile():
     # go through all followed coins
     for i in range(len(followed_coins)):
         coin_page = followed_coins[i]
-        coin_id = coin_page.coin_id_name
+        coin_id = coin_page.coin_id
         # Get the historical date by coin id
         historical_data = cg.get_coin_market_chart_by_id(id=coin_id, vs_currency='usd',
                                                          days=7,interval='daily')
@@ -247,7 +247,8 @@ def follow(coin_id, action):
 @app.route('/coins/<int:coin_id>')
 def coin_page(coin_id):
     coin_page = Coin.query.filter_by(id=coin_id).first_or_404()
-    coin_id = coin_page.coin_id_name
+    coin_id = coin_page.coin_id
+    print(coin_id)
     historical_data = cg.get_coin_market_chart_by_id(id=coin_id, vs_currency='usd',
                                                     days=7,interval='daily')
 
@@ -255,7 +256,11 @@ def coin_page(coin_id):
     
     x = [t[0] for t in historical_data.get('prices')]
     y = [p[1] for p in historical_data.get('prices')]
-    
+    # trying adding points to db here 
+    for k in range(len(x)):
+        p = Point(x=x[k], y=y[k], parent=coin_page)
+        db.session.add(p)
+    db.session.commit()
 
     fig = figure(plot_width=600, plot_height=500,
                  x_axis_type="datetime")

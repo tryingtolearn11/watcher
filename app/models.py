@@ -57,7 +57,7 @@ def load_user(id):
 # Coin Database Model
 class Coin(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    coin_id_name = db.Column(db.String(64))
+    coin_id= db.Column(db.String(64))
     name = db.Column(db.String(64))
     symbol = db.Column(db.String(32))
     current_price = db.Column(db.Float)
@@ -72,10 +72,10 @@ class Coin(db.Model):
 
 
 
-    def __init__(self, name, coin_id_name, symbol, current_price, market_cap_rank,
+    def __init__(self, name, coin_id, symbol, current_price, market_cap_rank,
                  market_cap, price_change_24h, price_change_7d,image):
         self.name = name
-        self.coin_id_name = coin_id_name
+        self.coin_id = coin_id
         self.symbol = symbol
         self.current_price = current_price
         self.market_cap_rank = market_cap_rank
@@ -101,7 +101,8 @@ class Point(db.Model):
 
 
     def __repr__(self):
-        return '<Point {}, {}, Parent = {}>'.format(self.x, self.y, self.parent)
+        return '<Point {}, {}, Parent = {}>'.format(self.x, self.y,
+                                                    self.parent.name)
 
     
 
