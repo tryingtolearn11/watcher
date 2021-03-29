@@ -259,21 +259,17 @@ def coin_page(coin_id):
 
     # if coin has no data points we add
     data = coin_page.data.all()
-
     for k in range(len(x)):
         if len(data) == 0:
             print("No data for {}, so we add new points".format(coin_page.name))
             p = Point(x=x[k], y=y[k], parent=coin_page)
             db.session.add(p)
         else:
-            # TODO: BUG HERE : Updated Coins no longer are graphed!
-            # Else update existing!
-            for p in data:
-                '''
-                setattr(p, 'x', x[k])
-                setattr(p, 'y', y[k])
-                '''
-                print("updated points", p.x, "-> ", x[k])
+            setattr(data[k], 'x', str(x[k]))
+            setattr(data[k], 'y', str(y[k]))
+            # print("updated points", data[k].x, "-> ", x[k])
+            # print("updated points", data[k].y, "-> ", y[k])
+            
 
     
     data = coin_page.data.all()
