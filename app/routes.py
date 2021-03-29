@@ -16,7 +16,7 @@ from bokeh.resources import INLINE, CDN
 
 
 # QUERIES AT EVERY INTERVAL
-@scheduler.task('interval', id='do_job_1', seconds=300)
+@scheduler.task('interval', id='do_job_1', seconds=2000)
 def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB 1 DONE")
@@ -56,14 +56,13 @@ def job1():
 
 
 # TODO: Need a way to get data for coins into the db
-@scheduler.task('interval', id='do_job_2', seconds=500)
+@scheduler.task('interval', id='do_job_2', seconds=1500)
 def job2():
     with scheduler.app.app_context():
         print("INTERVAL JOB 2 DONE")
         # Get data from our db
-        list = Coin.query.all()
-        coins = list[0:10]
-        print(coins)
+        list = Coin.query.order_by(Coin.market_cap_rank.asc()).all()
+        coins = list[0:50]
         for coin in coins:
             # Get data from request
             historical_data = cg.get_coin_market_chart_by_id(id=coin.coin_id,
@@ -86,12 +85,13 @@ def job2():
                 else:
                     setattr(data[k], 'x', str(x[k]))
                     setattr(data[k], 'y', str(y[k]))
-                    # print("updated points", data[k].x, "-> ", x[k])
-                    # print("updated points", data[k].y, "-> ", y[k])
+                    #print("updated points", data[k].x, "-> ", x[k])
+                    #print("updated points", data[k].y, "-> ", y[k])
             
             db.session.commit()
+            print('{} was data was added'.format(coin.name))
             print("NOW SLEEPING")
-            time.sleep(40)
+            time.sleep(20)
             
 
 
