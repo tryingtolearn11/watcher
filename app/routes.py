@@ -92,6 +92,8 @@ def job2():
             print('{} was data was added'.format(coin.name))
             print("NOW SLEEPING")
             time.sleep(20)
+
+        print("JOB2 All done :) ")
             
 
 
