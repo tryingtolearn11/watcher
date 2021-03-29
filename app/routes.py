@@ -56,15 +56,17 @@ def job1():
 
 
 # TODO: Need a way to get data for coins into the db
-@scheduler.task('interval', id='do_job_2', seconds=900)
+@scheduler.task('interval', id='do_job_2', seconds=50)
 def job2():
-    with scheduler.app.app.context():
+    with scheduler.app.app_context():
         print("INTERVAL JOB 2 DONE")
         # Get data from our db
-        coins = Coin.query.all()
+        list = Coin.query.all()
+        coins = list[0:10]
+        print(coins)
         for coin in coins:
             # Get data from request
-            historical_data = cg.get_coin_market_chart_range_by_id(id=coin.coin_id,
+            historical_data = cg.get_coin_market_chart_by_id(id=coin.coin_id,
                                                                    vs_currency='usd',
                                                                    days=7,
                                                                    interval='daily')
