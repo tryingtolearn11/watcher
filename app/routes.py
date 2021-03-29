@@ -21,7 +21,6 @@ def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB 1 DONE")
         # Get a request from api
-        printer = pprint.PrettyPrinter()
         data = cg.get_coins_markets(vs_currency='usd', order='market_cap_desc',
                                     per_page=250,
                                     price_change_percentage='24h,7d')
@@ -57,7 +56,41 @@ def job1():
 
 
 # TODO: Need a way to get data for coins into the db
+@scheduler.task('interval', id='do_job_2', seconds=900)
+def job2():
+    with scheduler.app.app.context():
+        print("INTERVAL JOB 2 DONE")
+        # Get data from our db
+        coins = Coin.query.all()
+        for coin in coins:
+            # Get data from request
+            historical_data = cg.get_coin_market_chart_range_by_id(id=coin.coin_id,
+                                                                   vs_currency='usd',
+                                                                   days=7,
+                                                                   interval='daily')
 
+            # Now seperate data into x and y lists 
+            x = [t[0] for t in historical_data.get('prices')]
+            y = [p[1] for p in historical_data.get('prices')]
+    
+            data = coin.data.all()
+            for k in range(len(x)):
+                if len(data) == 0:
+                    print("No data for {}, so we add new points".format(coin.name))
+                    p = Point(x=x[k], y=y[k], parent=coin)
+                    db.session.add(p)
+                
+                # If Coin already has existing data
+                else:
+                    setattr(data[k], 'x', str(x[k]))
+                    setattr(data[k], 'y', str(y[k]))
+                    # print("updated points", data[k].x, "-> ", x[k])
+                    # print("updated points", data[k].y, "-> ", y[k])
+            
+            db.session.commit()
+            print("NOW SLEEPING")
+            time.sleep(40)
+            
 
 
 
@@ -245,11 +278,10 @@ def coin_page(coin_id):
     coin_page = Coin.query.filter_by(id=coin_id).first_or_404()
     coin_id = coin_page.coin_id
     print(coin_id)
+    '''
     historical_data = cg.get_coin_market_chart_by_id(id=coin_id, vs_currency='usd',
                                                     days=7,interval='daily')
 
-
-    
 
     # Filter times and prices into sep lists
     x = [t[0] for t in historical_data.get('prices')]
@@ -270,18 +302,16 @@ def coin_page(coin_id):
             # print("updated points", data[k].x, "-> ", x[k])
             # print("updated points", data[k].y, "-> ", y[k])
             
-
+    '''
     
     data = coin_page.data.all()
     print("length of data : ", len(data))
-    db.session.commit()
+    # db.session.commit()
 
 
     times = [int(i.x) for i in data]
 
     prices = [float(j.y) for j in data]
-    print(type(times[2]))
-
     
     fig = figure(plot_width=600, plot_height=500,
                  x_axis_type="datetime")
@@ -290,7 +320,6 @@ def coin_page(coin_id):
     fig.line(times, prices)
     js_resources = INLINE.render_js()
     css_resources = INLINE.render_css()
-
     
     script, div = components(fig)
 
