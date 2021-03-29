@@ -57,7 +57,7 @@ def load_user(id):
 # Coin Database Model
 class Coin(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    coin_id = db.Column(db.String(64))
+    coin_id_name = db.Column(db.String(64))
     name = db.Column(db.String(64))
     symbol = db.Column(db.String(32))
     current_price = db.Column(db.Float)
@@ -67,14 +67,15 @@ class Coin(db.Model):
     price_change_7d = db.Column(db.Float)
     image = db.Column(db.String(180))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    # Get historical data
-    historical_prices_7d_time = db.Column(db.String(80))
-    historical_prices_7d_prices = db.Column(db.String(100))
+    data = db.relationship('Point', backref='parent', lazy='dynamic')
+    
 
-    def __init__(self, name, coin_id, symbol, current_price, market_cap_rank,
+
+
+    def __init__(self, name, coin_id_name, symbol, current_price, market_cap_rank,
                  market_cap, price_change_24h, price_change_7d,image):
         self.name = name
-        self.coin_id = coin_id
+        self.coin_id_name = coin_id_name
         self.symbol = symbol
         self.current_price = current_price
         self.market_cap_rank = market_cap_rank
@@ -82,10 +83,37 @@ class Coin(db.Model):
         self.price_change_24h = price_change_24h 
         self.price_change_7d = price_change_7d
         self.image = image
-        self.historical_prices_7d_time = historical_prices_7d_time
-        self.historical_prices_7d_prices = historical_prices_7d_prices
 
     def __repr__(self):
         return '<Coin {}, Symbol {}, Price {}, MarketCap Rank {}>'.format(self.name, self.symbol,
                                                        self.current_price, self.market_cap_rank)
+
+
+
+
+# Point class for data points per Coin
+
+class Point(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    x = db.Column(db.String(32))
+    y = db.Column(db.String(120))
+    coin_id = db.Column(db.Integer, db.ForeignKey('coin.id'))
+
+
+    def __repr__(self):
+        return '<Point {}, {}>'.format(self.x, self.y)
+
+    
+
+        
+
+
+
+
+
+
+
+
+
+
 
