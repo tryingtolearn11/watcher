@@ -148,7 +148,7 @@ def register():
 
 
 
-
+# TODO: Turn plotting code into a function to clean up file
 
 @app.route('/profile')
 @login_required
@@ -241,13 +241,11 @@ def profile():
 @app.route('/coins')
 def coins():
     # PAGINATE HERE
-    COINS_PER_PAGE = 50 
+    COINS_PER_PAGE = 25 
     page = request.args.get('page', 1, type=int)
     # Sort and Paginate
-    coins = Coin.query.order_by(Coin.market_cap_rank.asc()).paginate(page, COINS_PER_PAGE, False)
-    test_coins = Coin.query.all()
-    all_coins = test_coins[0:20]
-
+    coins =Coin.query.order_by(Coin.market_cap_rank.asc()).paginate(page,COINS_PER_PAGE,False)
+    all_coins = coins.items
     all_x_data = {}    
     all_y_data = {}    
     
