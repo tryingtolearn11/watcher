@@ -29,7 +29,6 @@ class User(UserMixin, db.Model):
                                                 self.followed.all())
     
 
-    
 
     def follow(self, coin):
         if not self.is_following(coin):
@@ -101,7 +100,7 @@ class Point(db.Model):
 
 
     def __repr__(self):
-        return '<Point {}, {}, Parent = {}>'.format(self.x, self.y,
+        return '<Point {}, {}, Parent{}>'.format(self.x, self.y,
                                                     self.parent.name)
 
     

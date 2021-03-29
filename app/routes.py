@@ -256,11 +256,32 @@ def coin_page(coin_id):
     
     x = [t[0] for t in historical_data.get('prices')]
     y = [p[1] for p in historical_data.get('prices')]
+
+
+    
     # trying adding points to db here 
+
+    # if coin has no data points we add
+    data = coin_page.data.all()
+
     for k in range(len(x)):
-        p = Point(x=x[k], y=y[k], parent=coin_page)
-        db.session.add(p)
+        if data is None:
+            print("No data for {}, so we add new points".format(coin_page.name))
+            p = Point(x=x[k], y=y[k], parent=coin_page)
+            db.session.add(p)
+        else:
+            for p in data:
+                setattr(p, 'x', x[k])
+                setattr(p, 'y', y[k])
+                print("updated points")
+
+    
+    data = coin_page.data.all()
+    print("length of data : ", len(data))
     db.session.commit()
+
+    
+
 
     fig = figure(plot_width=600, plot_height=500,
                  x_axis_type="datetime")
