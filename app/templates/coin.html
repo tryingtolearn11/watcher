@@ -3,6 +3,12 @@
 {% block content %}
 <div class="text-center m-5">
     <h2>Cryptocurrency Prices</h2></div>
+
+
+{{ js_resources|indent(4)|safe }}
+{{ css_resources|indent(4)|safe }}
+{{ script | safe }}
+
 <table style="width:60%" class="table table-hover table-light text-center
     table-bordered" align="center" style="margin: 0px auto;">
     <thead>
@@ -18,6 +24,7 @@
             <th scope="col"> Price Change 24h </th>
             <th scope="col"> Price Change 7d</th>
             <th scope="col"> Market Cap </th>
+            <th scope="col"> </th>
         </tr>
     </thead>
     <tbody>
@@ -47,7 +54,14 @@
             <td>{{  k.price_change_24h | percent_color_format() }}</td>
             <td>{{  k.price_change_7d | percent_color_format() }}</td>
             <td>{{  k.market_cap | number_format() }}</td>
-        {% endfor %}
+            {% if div is defined %}
+            {% if k.name in div %}
+            <td>{{ div[k.name] | safe }}</td>
+            {% endif %}
+            {% else %}
+                Error!
+            {% endif %}
+            {% endfor %}
         </tr>
     </tbody>
 </table>
@@ -63,6 +77,7 @@
 
 
 
+    
 
 
 

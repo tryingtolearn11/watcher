@@ -56,7 +56,7 @@ def job1():
 
 
 # TODO: Need a way to get data for coins into the db
-@scheduler.task('interval', id='do_job_2', seconds=50)
+@scheduler.task('interval', id='do_job_2', seconds=500)
 def job2():
     with scheduler.app.app_context():
         print("INTERVAL JOB 2 DONE")
@@ -150,9 +150,6 @@ def register():
 
 
 
-# TODO: NEED TO STORE HISTORICAL DATA INTO DB TO PREVENT OVERLOADING GET
-# REQUESTS!
-# TODO: CREATE DB TABLE TO STORE HISTORICAL VALUES FOR EACH COIN
 @app.route('/profile')
 @login_required
 def profile():
@@ -247,9 +244,83 @@ def coins():
     COINS_PER_PAGE = 50 
     page = request.args.get('page', 1, type=int)
     # Sort and Paginate
-    printer = pprint.PrettyPrinter()
     coins = Coin.query.order_by(Coin.market_cap_rank.asc()).paginate(page, COINS_PER_PAGE, False)
-    return render_template("coin.html", title="Coins",coins=coins)
+    test_coins = Coin.query.all()
+    all_coins = test_coins[0:20]
+
+    all_x_data = {}    
+    all_y_data = {}    
+    
+    # store plots in dict 
+    plots = {}
+    # go through all followed coins
+    for i in range(len(all_coins)):
+        coin_page = all_coins[i]
+        # Get the historical date by coin id from db
+        data = coin_page.data.all()
+        x = [int(i.x) for i in data]
+        y = [float(j.y) for j in data]
+
+        # Store seperated data by name and by x/y axis
+        all_x_data['{}'.format(coin_page.name)] = x
+        all_y_data['{}'.format(coin_page.name)] = y
+
+
+        times = all_x_data.get('{}'.format(coin_page.name))
+        prices = all_y_data.get('{}'.format(coin_page.name))
+        # Plot data
+        p = figure(plot_width=200, plot_height=100, x_axis_type="datetime")
+        p.line(times,prices)
+
+        # Clean up the graph - remove excess info
+        p.toolbar_location = None
+        p.toolbar.logo = None
+
+        # Customize
+        p.toolbar_location = None
+        p.toolbar.logo = None
+        # Grid lines off
+        p.xgrid.grid_line_color = None
+
+        p.ygrid.grid_line_color = None
+        # x y ticks
+        p.xaxis.major_tick_line_color = None
+        p.xaxis.minor_tick_line_color = None
+
+        p.yaxis.major_tick_line_color = None
+        p.yaxis.minor_tick_line_color = None
+        # x  and  y values off 
+        p.xaxis.major_label_text_font_size = '0pt'
+        p.yaxis.major_label_text_font_size = '0pt'
+
+        p.outline_line_color= None
+
+
+
+        # Key = Name of Coin and Value  = plot 
+        plots['{}'.format(all_coins[i].name)] = p
+
+
+    if len(plots) != 0:
+        script, div = components(plots)
+
+    # Condition for when user follows no coins
+    else:
+        script = ""
+        div = ""
+
+
+    js_resources = INLINE.render_js()
+    css_resources = INLINE.render_css()
+    return render_template(
+        "coin.html",
+        title="Coins",
+        coins=coins,
+        all_coins=all_coins,
+        script=script,
+        div=div,
+        js_resources=js_resources,
+        css_resources=css_resources)
 
    
 @app.route('/news')
