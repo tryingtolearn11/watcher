@@ -254,10 +254,10 @@ def coin_page(coin_id):
 
 
     
+
+    # Filter times and prices into sep lists
     x = [t[0] for t in historical_data.get('prices')]
     y = [p[1] for p in historical_data.get('prices')]
-
-
     
     # trying adding points to db here 
 
@@ -265,11 +265,12 @@ def coin_page(coin_id):
     data = coin_page.data.all()
 
     for k in range(len(x)):
-        if data is None:
+        if len(data) == 0:
             print("No data for {}, so we add new points".format(coin_page.name))
             p = Point(x=x[k], y=y[k], parent=coin_page)
             db.session.add(p)
         else:
+            # Else update existing!
             for p in data:
                 setattr(p, 'x', x[k])
                 setattr(p, 'y', y[k])
@@ -280,14 +281,18 @@ def coin_page(coin_id):
     print("length of data : ", len(data))
     db.session.commit()
 
+
+    times = [int(i.x) for i in data]
+
+    prices = [float(j.y) for j in data]
+    print(type(times[2]))
+
     
-
-
     fig = figure(plot_width=600, plot_height=500,
                  x_axis_type="datetime")
 
-    fig.line(x,y)
     
+    fig.line(times, prices)
     js_resources = INLINE.render_js()
     css_resources = INLINE.render_css()
 
