@@ -16,7 +16,7 @@ from bokeh.resources import INLINE, CDN
 
 
 # QUERIES AT EVERY INTERVAL
-@scheduler.task('interval', id='do_job_1', seconds=2000)
+@scheduler.task('interval', id='do_job_1', seconds=6000)
 def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB 1 DONE")
@@ -56,14 +56,15 @@ def job1():
 
 
 # TODO: Need a way to get data for coins into the db
-@scheduler.task('interval', id='do_job_2', seconds=1500)
+# TODO: Need to clear db and bring in fresh data - graph bugs 
+@scheduler.task('interval', id='do_job_2', seconds=600)
 def job2():
     with scheduler.app.app_context():
-        print("INTERVAL JOB 2 DONE")
         # Get data from our db
         list = Coin.query.order_by(Coin.market_cap_rank.asc()).all()
-        coins = list[0:50]
+        coins = list[100:200]
         for coin in coins:
+            print(coin.name)
             # Get data from request
             historical_data = cg.get_coin_market_chart_by_id(id=coin.coin_id,
                                                                    vs_currency='usd',
@@ -77,21 +78,19 @@ def job2():
             data = coin.data.all()
             for k in range(len(x)):
                 if len(data) == 0:
-                    print("No data for {}, so we add new points".format(coin.name))
+                    # print("No data for {}, so we add new points".format(coin.name))
                     p = Point(x=x[k], y=y[k], parent=coin)
                     db.session.add(p)
                 
                 # If Coin already has existing data
                 else:
-                    setattr(data[k], 'x', str(x[k]))
-                    setattr(data[k], 'y', str(y[k]))
-                    #print("updated points", data[k].x, "-> ", x[k])
-                    #print("updated points", data[k].y, "-> ", y[k])
+                    setattr(data[k-1], 'x', str(x[k-1]))
+                    setattr(data[k-1], 'y', str(y[k-1]))
             
             db.session.commit()
             print('{} was data was added'.format(coin.name))
             print("NOW SLEEPING")
-            time.sleep(20)
+            time.sleep(4)
 
         print("JOB2 All done :) ")
             
