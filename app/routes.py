@@ -1,6 +1,6 @@
 from app import app, db, scheduler
 from app.models import Coin, User, Point
-from app.forms import LoginForm, RegistrationForm, EmptyForm
+from app.forms import LoginForm, RegistrationForm
 from flask_login import current_user, login_user, logout_user, login_required
 from flask import render_template, redirect, url_for, flash, request
 from werkzeug.urls import url_parse
@@ -57,43 +57,49 @@ def job1():
 
 # TODO: Need a way to get data for coins into the db
 # TODO: Need to clear db and bring in fresh data - graph bugs 
-@scheduler.task('interval', id='do_job_2', seconds=600)
+@scheduler.task('interval', id='do_job_2', seconds=1000)
 def job2():
     with scheduler.app.app_context():
-        # Get data from our db
-        list = Coin.query.order_by(Coin.market_cap_rank.asc()).all()
-        coins = list[100:200]
-        for coin in coins:
-            print(coin.name)
-            # Get data from request
-            historical_data = cg.get_coin_market_chart_by_id(id=coin.coin_id,
-                                                                   vs_currency='usd',
-                                                                   days=7,
-                                                                   interval='daily')
+        try:
+            # Get data from our db
+            list = Coin.query.order_by(Coin.market_cap_rank.asc()).all()
+            coins = list
+            # keep track at index of coin
+            count = 0
+            for coin in coins:
+                print(coin.name)
+                # Get data from request
+                historical_data = cg.get_coin_market_chart_by_id(id=coin.coin_id,
+                                                                       vs_currency='usd',
+                                                                       days=7,
+                                                                       interval='daily')
 
-            # Now seperate data into x and y lists 
-            x = [t[0] for t in historical_data.get('prices')]
-            y = [p[1] for p in historical_data.get('prices')]
-    
-            data = coin.data.all()
-            for k in range(len(x)):
-                if len(data) == 0:
-                    # print("No data for {}, so we add new points".format(coin.name))
-                    p = Point(x=x[k], y=y[k], parent=coin)
-                    db.session.add(p)
+                # Now seperate data into x and y lists 
+                x = [t[0] for t in historical_data.get('prices')]
+                y = [p[1] for p in historical_data.get('prices')]
+        
+                data = coin.data.all()
+                for k in range(len(x)):
+                    if len(data) == 0:
+                        # print("No data for {}, so we add new points".format(coin.name))
+                        p = Point(x=x[k], y=y[k], parent=coin)
+                        db.session.add(p)
+                    
+                    # If Coin already has existing data
+                    else:
+                        setattr(data[k-1], 'x', str(x[k-1]))
+                        setattr(data[k-1], 'y', str(y[k-1]))
                 
-                # If Coin already has existing data
-                else:
-                    setattr(data[k-1], 'x', str(x[k-1]))
-                    setattr(data[k-1], 'y', str(y[k-1]))
-            
-            db.session.commit()
-            print('{} was data was added'.format(coin.name))
-            print("NOW SLEEPING")
-            time.sleep(4)
+                db.session.commit()
+                print('{} data was added'.format(coin.name))
+                print(count)
+                print("NOW SLEEPING")
+                time.sleep(3)
 
-        print("JOB2 All done :) ")
-            
+            print("JOB2 All done :) ")
+        except HTTPError:
+            pass
+                
 
 
 
