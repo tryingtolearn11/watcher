@@ -87,8 +87,9 @@ def job2():
                     
                     # If Coin already has existing data
                     else:
-                        setattr(data[k-1], 'x', str(x[k-1]))
-                        setattr(data[k-1], 'y', str(y[k-1]))
+                        if x[k] not in data:
+                            setattr(data[k-1], 'x', str(x[k-1]))
+                            setattr(data[k-1], 'y', str(y[k-1]))
                 
                 db.session.commit()
                 print('{} data was added'.format(coin.name))
@@ -384,7 +385,11 @@ def coin_page(coin_id):
     
     data = coin_page.data.all()
     print("length of data : ", len(data))
-    # db.session.commit()
+    # Checking for duplicate times
+    for i in range(len(data)):
+        if data[i].x == data[~i].x:
+            print(data[i], data[~i])
+        
 
 
     times = [int(i.x) for i in data]
