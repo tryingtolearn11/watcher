@@ -91,6 +91,7 @@ def job2():
                             setattr(data[k-1], 'x', str(x[k-1]))
                             setattr(data[k-1], 'y', str(y[k-1]))
                 
+                count+=1
                 db.session.commit()
                 print('{} data was added'.format(coin.name))
                 print(count)
@@ -98,7 +99,7 @@ def job2():
                 time.sleep(3)
 
             print("JOB2 All done :) ")
-        except HTTPError:
+        except 504:
             pass
                 
 
