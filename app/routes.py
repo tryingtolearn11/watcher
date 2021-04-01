@@ -66,7 +66,7 @@ def job2():
         try:
             # Get data from our db
             list = Coin.query.order_by(Coin.market_cap_rank.asc()).all()
-            coins = list
+            coins = list[::-1]
             # keep track at index of coin
             count = 0
             for coin in coins:
@@ -84,12 +84,12 @@ def job2():
                 data = coin.data.all()
                 for k in range(len(x)):
                     if len(data) == 0:
-                        # print("No data for {}, so we add new points".format(coin.name))
                         p = Point(x=x[k], y=y[k], parent=coin)
                         db.session.add(p)
                     
                     # If Coin already has existing data
                     else:
+                        # If this "time" is not in our db
                         if x[k] not in data:
                             setattr(data[k-1], 'x', str(x[k-1]))
                             setattr(data[k-1], 'y', str(y[k-1]))
@@ -102,7 +102,10 @@ def job2():
                 time.sleep(3)
 
             print("JOB2 All done :) ")
+
+
         except 504:
+            print("ERROR BREAKING HERE")
             pass
                 
 
@@ -155,7 +158,6 @@ def register():
 
 
 
-# TODO: Turn plotting code into a function to clean up file
 # PLOTTING FUNCTION 
 def plot(coins):
 
@@ -179,6 +181,7 @@ def plot(coins):
 
         times = all_x_data.get(coin.name)
         prices = all_y_data.get(coin.name)
+
         # Plot data
         p = figure(plot_width=200, plot_height=100, x_axis_type="datetime")
         p.line(times,prices)
@@ -190,16 +193,17 @@ def plot(coins):
         # Customize
         p.toolbar_location = None
         p.toolbar.logo = None
+
         # Grid lines off
         p.xgrid.grid_line_color = None
-
         p.ygrid.grid_line_color = None
+
         # x y ticks
         p.xaxis.major_tick_line_color = None
         p.xaxis.minor_tick_line_color = None
-
         p.yaxis.major_tick_line_color = None
         p.yaxis.minor_tick_line_color = None
+
         # x  and  y values off 
         p.xaxis.major_label_text_font_size = '0pt'
         p.yaxis.major_label_text_font_size = '0pt'
@@ -275,9 +279,6 @@ def coins():
         css_resources=css_resources)
 
    
-@app.route('/news')
-def news():
-    return redirect(url_for('index'))
 
 # Follow coins/ unfollow
 @app.route('/follow/<int:coin_id>/<action>')
@@ -306,6 +307,7 @@ def coin_page(coin_id):
     
     data = coin_page.data.all()
     print("length of data : ", len(data))
+
     # Checking for duplicate times
     for i in range(len(data)):
         if data[i].x == data[~i].x:
@@ -314,7 +316,6 @@ def coin_page(coin_id):
 
 
     times = [int(i.x) for i in data]
-
     prices = [float(j.y) for j in data]
     
     fig = figure(plot_width=600, plot_height=500,
@@ -338,6 +339,19 @@ def coin_page(coin_id):
         css_resources=css_resources)
     
     return html
+
+
+@app.route('/news')
+def news():
+    return redirect(url_for('index'))
+
+
+
+
+
+
+
+
 
 
 
