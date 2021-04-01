@@ -13,10 +13,12 @@ from bokeh.plotting import figure
 from bokeh.resources import INLINE, CDN
 
 
+# pycoingecko
+cg = CoinGeckoAPI()
 
 
 # QUERIES AT EVERY INTERVAL
-@scheduler.task('interval', id='do_job_1', seconds=6000)
+@scheduler.task('interval', id='do_job_1', seconds=30)
 def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB 1 DONE")
@@ -30,7 +32,8 @@ def job1():
         # Much better request handling
         for i in range(len(data)):
             new_coin = Coin.query.filter_by(name=data[i].get('name')).first()
-
+            
+            # If coin is new, add to db
             if new_coin is None:
                 new_coin = Coin(name=data[i].get('name'), coin_id=data[i].get('id'),symbol=data[i].get('symbol'),
                                 current_price=data[i].get('current_price'),
@@ -45,6 +48,7 @@ def job1():
                 db.session.add(new_coin)
                 db.session.commit()
             else:
+                # Otherwise update the numbers for coins
 
                 setattr(new_coin, 'current_price', data[i].get('current_price')) 
                 setattr(new_coin, 'market_cap_rank',data[i].get('market_cap_rank')) 
@@ -55,8 +59,7 @@ def job1():
 
 
 
-# TODO: Need a way to get data for coins into the db
-# TODO: Need to clear db and bring in fresh data - graph bugs 
+# Queries for historical data per coin
 @scheduler.task('interval', id='do_job_2', seconds=1000)
 def job2():
     with scheduler.app.app_context():
@@ -94,7 +97,7 @@ def job2():
                 count+=1
                 db.session.commit()
                 print('{} data was added'.format(coin.name))
-                print(count)
+                print("Coin # : ", count)
                 print("NOW SLEEPING")
                 time.sleep(3)
 
@@ -106,11 +109,6 @@ def job2():
 
 
 
-
-
-
-# pycoingecko
-cg = CoinGeckoAPI()
 
 @app.route('/')
 @app.route('/index')
@@ -158,34 +156,29 @@ def register():
 
 
 # TODO: Turn plotting code into a function to clean up file
+# PLOTTING FUNCTION 
+def plot(coins):
 
-@app.route('/profile')
-@login_required
-def profile():
-    followed_coins = current_user.followed.order_by(Coin.market_cap_rank.asc()).all()
-    if len(followed_coins) == 0:
-        flash('You are not following any coins')
-    
     all_x_data = {}    
     all_y_data = {}    
     
     # store plots in dict 
     plots = {}
     # go through all followed coins
-    for i in range(len(followed_coins)):
-        coin_page = followed_coins[i]
+    for i in range(len(coins)):
+        coin = coins[i]
         # Get the historical date by coin id from db
-        data = coin_page.data.all()
+        data = coin.data.all()
         x = [int(i.x) for i in data]
         y = [float(j.y) for j in data]
 
         # Store seperated data by name and by x/y axis
-        all_x_data['{}'.format(coin_page.name)] = x
-        all_y_data['{}'.format(coin_page.name)] = y
+        all_x_data[coin.name] = x
+        all_y_data[coin.name] = y
 
 
-        times = all_x_data.get('{}'.format(coin_page.name))
-        prices = all_y_data.get('{}'.format(coin_page.name))
+        times = all_x_data.get(coin.name)
+        prices = all_y_data.get(coin.name)
         # Plot data
         p = figure(plot_width=200, plot_height=100, x_axis_type="datetime")
         p.line(times,prices)
@@ -216,26 +209,36 @@ def profile():
 
 
         # Key = Name of Coin and Value  = plot 
-        plots['{}'.format(followed_coins[i].name)] = p
+        plots[coins[i].name] = p
 
-    print("Plots : ", plots)
     if len(plots) != 0:
         script, div = components(plots)
 
-    # Condition for when user follows no coins
+    # Condition for no coins
     else:
         script = ""
         div = ""
+        
+    return script, div
 
-    #print(div)
 
+@app.route('/profile')
+@login_required
+def profile():
+    followed_coins = current_user.followed.order_by(Coin.market_cap_rank.asc()).all()
+    if len(followed_coins) == 0:
+        flash('You are not following any coins')
+    
+    # Plot 
+    script, div = plot(followed_coins)
+    js_resources = INLINE.render_js()
+    css_resources = INLINE.render_css()
+        
     for c in followed_coins:
         if c.name in div:
             print("FOUND :", c.name)
 
 
-    js_resources = INLINE.render_js()
-    css_resources = INLINE.render_css()
     return render_template(
         "profile.html",
         title="Profile",
@@ -255,70 +258,12 @@ def coins():
     # Sort and Paginate
     coins =Coin.query.order_by(Coin.market_cap_rank.asc()).paginate(page,COINS_PER_PAGE,False)
     all_coins = coins.items
-    all_x_data = {}    
-    all_y_data = {}    
-    
-    # store plots in dict 
-    plots = {}
-    # go through all followed coins
-    for i in range(len(all_coins)):
-        coin_page = all_coins[i]
-        # Get the historical date by coin id from db
-        data = coin_page.data.all()
-        x = [int(i.x) for i in data]
-        y = [float(j.y) for j in data]
 
-        # Store seperated data by name and by x/y axis
-        all_x_data['{}'.format(coin_page.name)] = x
-        all_y_data['{}'.format(coin_page.name)] = y
-
-
-        times = all_x_data.get('{}'.format(coin_page.name))
-        prices = all_y_data.get('{}'.format(coin_page.name))
-        # Plot data
-        p = figure(plot_width=200, plot_height=100, x_axis_type="datetime")
-        p.line(times,prices)
-
-        # Clean up the graph - remove excess info
-        p.toolbar_location = None
-        p.toolbar.logo = None
-
-        # Customize
-        p.toolbar_location = None
-        p.toolbar.logo = None
-        # Grid lines off
-        p.xgrid.grid_line_color = None
-
-        p.ygrid.grid_line_color = None
-        # x y ticks
-        p.xaxis.major_tick_line_color = None
-        p.xaxis.minor_tick_line_color = None
-
-        p.yaxis.major_tick_line_color = None
-        p.yaxis.minor_tick_line_color = None
-        # x  and  y values off 
-        p.xaxis.major_label_text_font_size = '0pt'
-        p.yaxis.major_label_text_font_size = '0pt'
-
-        p.outline_line_color= None
-
-
-
-        # Key = Name of Coin and Value  = plot 
-        plots['{}'.format(all_coins[i].name)] = p
-
-
-    if len(plots) != 0:
-        script, div = components(plots)
-
-    # Condition for when user follows no coins
-    else:
-        script = ""
-        div = ""
-
-
+    # Plot
+    script, div = plot(all_coins)
     js_resources = INLINE.render_js()
     css_resources = INLINE.render_css()
+
     return render_template(
         "coin.html",
         title="Coins",
@@ -358,31 +303,6 @@ def coin_page(coin_id):
     coin_page = Coin.query.filter_by(id=coin_id).first_or_404()
     coin_id = coin_page.coin_id
     print(coin_id)
-    '''
-    historical_data = cg.get_coin_market_chart_by_id(id=coin_id, vs_currency='usd',
-                                                    days=7,interval='daily')
-
-
-    # Filter times and prices into sep lists
-    x = [t[0] for t in historical_data.get('prices')]
-    y = [p[1] for p in historical_data.get('prices')]
-    
-    # trying adding points to db here 
-
-    # if coin has no data points we add
-    data = coin_page.data.all()
-    for k in range(len(x)):
-        if len(data) == 0:
-            print("No data for {}, so we add new points".format(coin_page.name))
-            p = Point(x=x[k], y=y[k], parent=coin_page)
-            db.session.add(p)
-        else:
-            setattr(data[k], 'x', str(x[k]))
-            setattr(data[k], 'y', str(y[k]))
-            # print("updated points", data[k].x, "-> ", x[k])
-            # print("updated points", data[k].y, "-> ", y[k])
-            
-    '''
     
     data = coin_page.data.all()
     print("length of data : ", len(data))
