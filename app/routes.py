@@ -19,7 +19,7 @@ cg = CoinGeckoAPI()
 
 
 # QUERIES AT EVERY INTERVAL
-@scheduler.task('interval', id='do_job_1', seconds=3000)
+@scheduler.task('interval', id='do_job_1', seconds=300)
 def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB 1 DONE")
@@ -62,7 +62,7 @@ def job1():
 
 
 # Queries for historical data per coin
-@scheduler.task('interval', id='do_job_2', seconds=600)
+@scheduler.task('interval', id='do_job_2', seconds=700)
 def job2():
     with scheduler.app.app_context():
         # Get data from our db
@@ -251,9 +251,10 @@ def profile():
         css_resources=css_resources)
 
 
-
+# TODO: Fix bug when cached -cannot go to other pages
+# MIGHT HAVE TO CACHE ON THE HTML FILE INSTEAD OF HERE
 @app.route('/coins')
-@cache.cached(timeout=2500)
+@cache.cached(timeout=100, key_prefix='page')
 def coins():
     # PAGINATE HERE
     COINS_PER_PAGE = 25 
@@ -298,7 +299,9 @@ def follow(coin_id, action):
 
 
 
+
 @app.route('/coins/<int:coin_id>')
+@cache.cached(timeout=300)
 def coin_page(coin_id):
     coin_page = Coin.query.filter_by(id=coin_id).first_or_404()
     coin_id = coin_page.coin_id
