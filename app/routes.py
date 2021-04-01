@@ -18,7 +18,7 @@ cg = CoinGeckoAPI()
 
 
 # QUERIES AT EVERY INTERVAL
-@scheduler.task('interval', id='do_job_1', seconds=30)
+@scheduler.task('interval', id='do_job_1', seconds=2000)
 def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB 1 DONE")
@@ -47,9 +47,10 @@ def job1():
                 print("{}".format(new_coin.coin_id))
                 db.session.add(new_coin)
                 db.session.commit()
-            else:
-                # Otherwise update the numbers for coins
 
+            else:
+
+                # Otherwise update the numbers for coins
                 setattr(new_coin, 'current_price', data[i].get('current_price')) 
                 setattr(new_coin, 'market_cap_rank',data[i].get('market_cap_rank')) 
                 setattr(new_coin, 'market_cap', data[i].get('market_cap'))
@@ -63,54 +64,46 @@ def job1():
 @scheduler.task('interval', id='do_job_2', seconds=1000)
 def job2():
     with scheduler.app.app_context():
-        try:
-            # Get data from our db
-            list = Coin.query.order_by(Coin.market_cap_rank.asc()).all()
-            coins = list[::-1]
-            # keep track at index of coin
-            count = 0
-            for coin in coins:
-                print(coin.name)
-                # Get data from request
-                historical_data = cg.get_coin_market_chart_by_id(id=coin.coin_id,
-                                                                       vs_currency='usd',
-                                                                       days=7,
-                                                                       interval='daily')
+        # Get data from our db
+        coin = Coin.query.order_by(Coin.market_cap_rank.asc()).all()
+        # keep track at index of coin
+        count = 0
+        for coin in coins:
+            print(coin.name)
+            # Get data from request
+            historical_data = cg.get_coin_market_chart_by_id(id=coin.coin_id,
+                                                                   vs_currency='usd',
+                                                                   days=7,
+                                                                   interval='daily')
 
-                # Now seperate data into x and y lists 
-                x = [t[0] for t in historical_data.get('prices')]
-                y = [p[1] for p in historical_data.get('prices')]
-        
-                data = coin.data.all()
-                for k in range(len(x)):
-                    if len(data) == 0:
-                        p = Point(x=x[k], y=y[k], parent=coin)
-                        db.session.add(p)
-                    
-                    # If Coin already has existing data
-                    else:
-                        # If this "time" is not in our db
-                        if x[k] not in data:
-                            setattr(data[k-1], 'x', str(x[k-1]))
-                            setattr(data[k-1], 'y', str(y[k-1]))
+            # Now seperate data into x and y lists 
+            x = [t[0] for t in historical_data.get('prices')]
+            y = [p[1] for p in historical_data.get('prices')]
+    
+            data = coin.data.all()
+            for k in range(len(x)):
+                if len(data) == 0:
+                    p = Point(x=x[k], y=y[k], parent=coin)
+                    db.session.add(p)
                 
-                count+=1
-                db.session.commit()
-                print('{} data was added'.format(coin.name))
-                print("Coin # : ", count)
-                print("NOW SLEEPING")
-                time.sleep(3)
+                # If Coin already has existing data
+                else:
+                    # If this "time" is not in our db
+                    if x[k] not in data:
+                        setattr(data[k-1], 'x', str(x[k-1]))
+                        setattr(data[k-1], 'y', str(y[k-1]))
+            
+            count+=1
+            db.session.commit()
+            print('{} data was added'.format(coin.name))
+            print("Coin # : ", count)
+            print("NOW SLEEPING")
+            time.sleep(3)
 
-            print("JOB2 All done :) ")
+        print("JOB2 All done :) ")
 
 
-        except 504:
-            print("ERROR BREAKING HERE")
-            pass
                 
-
-
-
 
 
 @app.route('/')
