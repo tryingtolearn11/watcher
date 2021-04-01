@@ -226,7 +226,6 @@ def plot(coins):
 
 
 @app.route('/profile')
-@cache.cached(timeout=300)
 @login_required
 def profile():
     followed_coins = current_user.followed.order_by(Coin.market_cap_rank.asc()).all()
@@ -325,7 +324,7 @@ def coin_page(coin_id):
                  x_axis_type="datetime")
 
     
-    p.yaxis[0].formatter = NumeralTickFormatter(format="$0")
+    p.yaxis[0].formatter = NumeralTickFormatter(format="$0.00")
     p.line(times, prices)
 
     # Customize
