@@ -12,6 +12,7 @@ from sqlalchemy import desc, asc
 from bokeh.embed import components, file_html
 from bokeh.plotting import figure
 from bokeh.resources import INLINE, CDN
+from bokeh.models import NumeralTickFormatter
 
 
 # pycoingecko
@@ -78,7 +79,7 @@ def job2():
                                                                    days=7,
                                                                    interval='daily')
 
-            # Now seperate data into x and y lists 
+            # Now filter data into x and y lists 
             x = [t[0] for t in historical_data.get('prices')]
             y = [p[1] for p in historical_data.get('prices')]
     
@@ -225,6 +226,7 @@ def plot(coins):
 
 
 @app.route('/profile')
+@cache.cached(timeout=300)
 @login_required
 def profile():
     followed_coins = current_user.followed.order_by(Coin.market_cap_rank.asc()).all()
@@ -254,7 +256,7 @@ def profile():
 # TODO: Fix bug when cached -cannot go to other pages
 # MIGHT HAVE TO CACHE ON THE HTML FILE INSTEAD OF HERE
 @app.route('/coins')
-@cache.cached(timeout=100, key_prefix='page')
+@cache.cached(timeout=300)
 def coins():
     # PAGINATE HERE
     COINS_PER_PAGE = 25 
@@ -315,20 +317,29 @@ def coin_page(coin_id):
         if data[i].x == data[~i].x:
             print(data[i], data[~i])
         
-
-
+    # Plotting 
     times = [int(i.x) for i in data]
     prices = [float(j.y) for j in data]
     
-    fig = figure(plot_width=600, plot_height=500,
+    p = figure(plot_width=600, plot_height=500,
                  x_axis_type="datetime")
 
     
-    fig.line(times, prices)
+    p.yaxis[0].formatter = NumeralTickFormatter(format="$0")
+    p.line(times, prices)
+
+    # Customize
+    p.toolbar_location = None
+    p.toolbar.logo = None
+
+    # Grid lines off
+    p.xgrid.grid_line_color = None
+    p.ygrid.grid_line_color = None
+
     js_resources = INLINE.render_js()
     css_resources = INLINE.render_css()
     
-    script, div = components(fig)
+    script, div = components(p)
 
     # render html here
     html = render_template(
