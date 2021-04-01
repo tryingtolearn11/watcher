@@ -1,8 +1,9 @@
-from app import app, db, scheduler
+from app import app, db, scheduler, cache
 from app.models import Coin, User, Point
 from app.forms import LoginForm, RegistrationForm
 from flask_login import current_user, login_user, logout_user, login_required
 from flask import render_template, redirect, url_for, flash, request
+from flask_caching import Cache
 from werkzeug.urls import url_parse
 from pycoingecko import CoinGeckoAPI
 import pprint
@@ -18,7 +19,7 @@ cg = CoinGeckoAPI()
 
 
 # QUERIES AT EVERY INTERVAL
-@scheduler.task('interval', id='do_job_1', seconds=2000)
+@scheduler.task('interval', id='do_job_1', seconds=3000)
 def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB 1 DONE")
@@ -61,11 +62,12 @@ def job1():
 
 
 # Queries for historical data per coin
-@scheduler.task('interval', id='do_job_2', seconds=1000)
+@scheduler.task('interval', id='do_job_2', seconds=600)
 def job2():
     with scheduler.app.app_context():
         # Get data from our db
-        coin = Coin.query.order_by(Coin.market_cap_rank.asc()).all()
+        list = Coin.query.order_by(Coin.market_cap_rank.asc()).all()
+        coins = list
         # keep track at index of coin
         count = 0
         for coin in coins:
@@ -90,20 +92,23 @@ def job2():
                 else:
                     # If this "time" is not in our db
                     if x[k] not in data:
-                        setattr(data[k-1], 'x', str(x[k-1]))
-                        setattr(data[k-1], 'y', str(y[k-1]))
+                        setattr(data[k], 'x', str(x[k]))
+                        setattr(data[k], 'y', str(y[k]))
             
             count+=1
             db.session.commit()
             print('{} data was added'.format(coin.name))
             print("Coin # : ", count)
             print("NOW SLEEPING")
-            time.sleep(3)
+            time.sleep(2)
 
         print("JOB2 All done :) ")
 
 
                 
+
+
+
 
 
 @app.route('/')
@@ -248,6 +253,7 @@ def profile():
 
 
 @app.route('/coins')
+@cache.cached(timeout=2500)
 def coins():
     # PAGINATE HERE
     COINS_PER_PAGE = 25 

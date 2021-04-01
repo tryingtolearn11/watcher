@@ -6,14 +6,13 @@ from config import Config
 from pycoingecko import CoinGeckoAPI 
 from sqlalchemy import MetaData
 from flask_apscheduler import APScheduler 
+from flask_caching import Cache
 from flask_bootstrap import Bootstrap
 from jinja2 import Markup
 
 app = Flask(__name__)
 app.config.from_object(Config)
-app.config.from_object(Config)
-
-
+app.config['CACHE_TYPE'] = 'simple'
 
 
 login = LoginManager(app)
@@ -23,6 +22,10 @@ cg = CoinGeckoAPI()
 db = SQLAlchemy(app)
 migrate = Migrate(app, db, render_as_batch=True)
 bootstrap = Bootstrap(app)
+cache = Cache(app)
+
+
+
 naming_convention = {
         "ix": 'ix_%(column_0_label)s',
         "uq": "uq_%(table_name)s_%(column_0_name)s",
