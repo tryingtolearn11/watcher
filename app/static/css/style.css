@@ -2,12 +2,11 @@
     text-align: center;
 }
 
-
 .jumbotron {
     background-image: url("../watchart.jpg");
     background-size: cover;
     background-repeat: no-repeat;
-    height: 80%;
+    height: 100%;
     width: 100%;
 }
 
@@ -22,7 +21,6 @@
     margin-right: auto;
     text-align: left;
 }
-
 
 
 
