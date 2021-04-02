@@ -3,6 +3,13 @@
 }
 
 
+.jumbotron {
+    background-image: url("../watchart.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 80%;
+    width: 100%;
+}
 
 .form-center {
     display: block;
