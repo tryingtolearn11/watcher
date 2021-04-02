@@ -20,6 +20,7 @@
 }
 
 .cards .row .card{
+    border-radius: 5px;
     margin-left: 55px;
 }
 
