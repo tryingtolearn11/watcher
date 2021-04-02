@@ -2,12 +2,25 @@
     text-align: center;
 }
 
-.jumbotron {
+.iconimg {
+    margin-left: 10px;
+    padding: 10px;
+}
+
+.frontpage .jumbotron-fluid {
     background-image: url("../watchart.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     height: 100%;
     width: 100%;
+}
+
+.cards .jumbotron-fluid {
+    background-color: transparent !important;
+}
+
+.cards .row .card{
+    margin-left: 55px;
 }
 
 .form-center {
