@@ -36,5 +36,3 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('Please choose a different email address.')
     
 
-class EmptyForm(FlaskForm):
-    submit = SubmitField('Submit')
