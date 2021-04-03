@@ -20,7 +20,7 @@ cg = CoinGeckoAPI()
 
 
 # QUERIES AT EVERY INTERVAL
-@scheduler.task('interval', id='do_job_1', seconds=300)
+@scheduler.task('interval', id='do_job_1', seconds=1000)
 def job1():
     with scheduler.app.app_context():
         print("INTERVAL JOB 1 DONE")
@@ -84,7 +84,7 @@ def job2():
             y = [p[1] for p in historical_data.get('prices')]
     
             data = coin.data.all()
-            for k in range(len(x)):
+            for k in range(len(x)-1):
                 if len(data) == 0:
                     p = Point(x=x[k], y=y[k], parent=coin)
                     db.session.add(p)
@@ -93,8 +93,8 @@ def job2():
                 else:
                     # If this "time" is not in our db
                     if x[k] not in data:
-                        setattr(data[k-1], 'x', str(x[k-1]))
-                        setattr(data[k-1], 'y', str(y[k-1]))
+                        setattr(data[k], 'x', str(x[k]))
+                        setattr(data[k], 'y', str(y[k]))
             
             count+=1
             db.session.commit()

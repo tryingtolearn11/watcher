@@ -17,8 +17,6 @@
 <li><s>Display graph charts</s><li>
 <li>Implement Cache for optimizing </li>
 <li>Clean up graph</li>
-<li>ADD NEWS SECTION</li>
-<li>ADD DASHBOARD ? </li>
-
+<li>ADD RSS NEWS FEED</li>
 <li>ADD SEARCH BAR FOR COINS</li>
 </div>
