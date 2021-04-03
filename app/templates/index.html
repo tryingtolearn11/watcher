@@ -13,15 +13,21 @@
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
             <div class="row">
-                <div class="card text-white bg-success mb-3" style="max-width: 20rem;">
-                    <h4 class="card-body text-white text-center">How does this all work</h4>
-                        <p class="text-center">How does this all work?</p>
+                <div class="card border-light shadow text-white bg-success mb-3" style="max-width: 20rem;">
+                    <a class="nounderline" role="button"
+                        href="{{url_for('about')}}">
+                        <h4 class="card-body text-white text-center">How does this all work ?</h4>
+                    </a>
                 </div>
-                <div class="card text-white bg-info mb-3" style="max-width: 20rem;">
-                    <h4 class="card-body text-white text-center">Show me the live cryptocurrency market</h4>
+                <div class="card border-light shadow text-white bg-info mb-3" style="max-width: 20rem;">
+                    <a class="nounderline" role="button" href="{{url_for('coins')}}">
+                        <h4 class="card-body text-white text-center">Show me the live cryptocurrency market</h4>
+                    </a>
                 </div>
-                <div class="card text-white bg-warning mb-3" style="max-width: 20rem;">
-                    <h4 class="card-body text-white text-center">I'm ready to sign up!</h4>
+                <div class="card border-light shadow text-white bg-warning mb-3" style="max-width: 20rem;">
+                    <a class="nounderline" role="button" href="{{url_for('register')}}">
+                        <h4 class="card-body text-white text-center">I'm ready to sign up!</h4>
+                    </a>
                 </div>
             </div>
         </div>

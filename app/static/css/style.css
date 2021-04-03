@@ -3,8 +3,8 @@
 }
 
 .iconimg {
-    margin-left: 10px;
-    padding: 10px;
+    margin-left: 10px !important;
+    padding: 10px !important;
 }
 
 .frontpage .jumbotron-fluid {
@@ -22,6 +22,10 @@
 .cards .row .card{
     border-radius: 5px;
     margin-left: 55px;
+}
+
+.nounderline {
+    text-decoration: none !important;
 }
 
 .form-center {

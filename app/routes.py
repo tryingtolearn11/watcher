@@ -308,7 +308,7 @@ def coin_page(coin_id):
     coin_id = coin_page.coin_id
     print(coin_id)
     
-    data = coin_page.data.all()
+    data = coin_page.data.order_by(Point.x.asc()).all()
     print("length of data : ", len(data))
 
     # Checking for duplicate times
@@ -353,9 +353,9 @@ def coin_page(coin_id):
     return html
 
 
-@app.route('/news')
-def news():
-    return redirect(url_for('index'))
+@app.route('/about')
+def about():
+    return render_template('about.html', title='About')
 
 
 
