@@ -3,7 +3,6 @@
 
 {% block content %}
 
-<h1><img src="{{coin_page.image}}" alt="" border=3 width=50 height=50></img> {{ coin_page.name }} </h1>
 
 {{ js_resources | indent(4)|safe }}
 {{ css_resources|indent(4)|safe }}
@@ -11,11 +10,11 @@
 
 
 
-<body>
+<h1>
+    <img src="{{coin_page.image}}" alt="" border=3 width=50 height=50></img> {{ coin_page.name }}
+</h1>
 {{ plot_div|indent(4)|safe }}
-
 <p>Rank # {{coin_page.market_cap_rank}}</p>
 <p>Current Price {{coin_page.current_price | currency_format()}}
-</body>
 {% endblock %}
 

@@ -8,13 +8,21 @@
 }
 
 .frontpage .jumbotron-fluid {
-    background-image: url("../watchart.jpg");
+    background-image: url("../homepage2.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     height: 100%;
     width: 100%;
 }
 
+
+.secondblock .jumbotron-fluid {
+    background-image: url("../watchart.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100%;
+    width: 100%;
+}
 
 .cards .jumbotron-fluid {
     background-color: transparent !important;
@@ -60,4 +68,3 @@
     -webkit-transform: scale(1.5);
     transform: scale(1.5);
 }
-

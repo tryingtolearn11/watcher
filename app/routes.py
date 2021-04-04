@@ -84,7 +84,7 @@ def job2():
             y = [p[1] for p in historical_data.get('prices')]
     
             data = coin.data.all()
-            for k in range(len(x)-1):
+            for k in range(len(x)):
                 if len(data) == 0:
                     p = Point(x=x[k], y=y[k], parent=coin)
                     db.session.add(p)
@@ -93,8 +93,8 @@ def job2():
                 else:
                     # If this "time" is not in our db
                     if x[k] not in data:
-                        setattr(data[k+1], 'x', str(x[k+1]))
-                        setattr(data[k+1], 'y', str(y[k+1]))
+                        setattr(data[k], 'x', str(x[k]))
+                        setattr(data[k], 'y', str(y[k]))
             
             count+=1
             db.session.commit()
@@ -302,7 +302,7 @@ def follow(coin_id, action):
 
 
 @app.route('/coins/<int:coin_id>')
-@cache.cached(timeout=300)
+# @cache.cached(timeout=300)
 def coin_page(coin_id):
     coin_page = Coin.query.filter_by(id=coin_id).first_or_404()
     coin_id = coin_page.coin_id
