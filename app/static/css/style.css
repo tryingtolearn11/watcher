@@ -37,6 +37,11 @@
     text-decoration: none !important;
 }
 
+.footer {
+    height: 20px !important;
+    width: 30px !important;
+}
+
 .form-center {
     display: block;
     text-align: center;
