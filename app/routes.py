@@ -91,10 +91,12 @@ def job2():
                 
                 # If Coin already has existing data
                 else:
+                    if len(data) == len(x):
                     # If this "time" is not in our db
-                    if x[k] not in data and len(x) >= 168:
-                        setattr(data[k], 'x', str(x[k]))
-                        setattr(data[k], 'y', str(y[k]))
+                        if x[k] not in data and len(x) >= 168:
+                            setattr(data[k], 'x', str(x[k-1]))
+                            setattr(data[k], 'y', str(y[k-1]))
+                
             
             count+=1
             db.session.commit()
