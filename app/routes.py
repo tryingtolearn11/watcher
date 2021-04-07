@@ -63,7 +63,7 @@ def job1():
 
 
 # Queries for historical data per coin
-@scheduler.task('interval', id='do_job_2', seconds=700)
+@scheduler.task('interval', id='do_job_2', seconds=1400)
 def job2():
     with scheduler.app.app_context():
         # Get data from our db
