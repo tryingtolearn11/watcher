@@ -92,9 +92,9 @@ def job2():
                 # If Coin already has existing data
                 else:
                     # If this "time" is not in our db
-                    if x[k] not in data:
-                        setattr(data[k-1], 'x', str(x[k-1]))
-                        setattr(data[k-1], 'y', str(y[k-1]))
+                    if x[k] not in data and len(x) >= 168:
+                        setattr(data[k], 'x', str(x[k]))
+                        setattr(data[k], 'y', str(y[k]))
             
             count+=1
             db.session.commit()
@@ -318,6 +318,7 @@ def coin_page(coin_id):
         
     # Plotting 
     times = [int(i.x) for i in data]
+    print("x : ", len(times))
     prices = [float(j.y) for j in data]
     
     p = figure(plot_width=600, plot_height=500,
