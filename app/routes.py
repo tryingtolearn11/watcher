@@ -93,8 +93,8 @@ def job2():
                 else:
                     # If this "time" is not in our db
                     if x[k] not in data:
-                        setattr(data[k], 'x', str(x[k]))
-                        setattr(data[k], 'y', str(y[k]))
+                        setattr(data[k-1], 'x', str(x[k-1]))
+                        setattr(data[k-1], 'y', str(y[k-1]))
             
             count+=1
             db.session.commit()
