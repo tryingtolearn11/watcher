@@ -9,12 +9,12 @@
 {{ plot_script|indent(4)|safe }}
 
 
-
+<div align="center">
 <h1>
     <img src="{{coin_page.image}}" alt="" border=3 width=50 height=50></img> {{ coin_page.name }}
 </h1>
-{{ plot_div|indent(4)|safe }}
-<p>Rank # {{coin_page.market_cap_rank}}</p>
+{{ plot_div|indent(4)|safe }}</div>
+<span class="text-center">Rank # {{coin_page.market_cap_rank}}</span>
 <p>Current Price {{coin_page.current_price | currency_format()}}
 {% endblock %}
 
