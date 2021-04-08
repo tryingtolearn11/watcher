@@ -1,3 +1,5 @@
+
+
 .coin-title{
     text-align: center;
 }
@@ -5,6 +7,12 @@
 .iconimg {
     margin-left: 10px !important;
     padding: 10px !important;
+}
+
+.messages li {
+    text-align: center;
+    list-style-type: none;
+    font-size: 20px;
 }
 
 .frontpage .jumbotron-fluid {
@@ -83,7 +91,7 @@
 
 
 .about .row h4 {
-    color: blue;
+    color: teal;
     font-size:  30px;
 }
 
