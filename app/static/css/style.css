@@ -89,6 +89,9 @@
     
 }
 
+.about .jumbotron-fluid {
+    background-color: transparent !important;
+}
 
 .about .row h4 {
     color: teal;
