@@ -6,7 +6,7 @@
 
 <h3>Coinwatch provides a live market tracker that shows the price changes, market cap, graphs in up to 7 day intervals. Simply hover over to your desired coin to find out more from our graphs</h3>
 
-<img src="https://github.com/tryingtolearn11/watcher/blob/main/app/static/coinwatch.png" width=350 height= 250>
+<img src="https://github.com/tryingtolearn11/watcher/blob/main/app/static/coinwatch.png" width=450 height= 400>
 
 
 
