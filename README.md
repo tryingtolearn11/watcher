@@ -2,11 +2,11 @@
 
 
 
-<h2> CoinWatch is your guide to aid you in tracking Cryptocurrencies"</h2>
+<h1> Coinwatch is your guide to aid you in tracking Cryptocurrencies"</h1>
 
 
 
-<h3> Running Locally </h3>
+<h2> Running Locally </h2>
 
 ```
 $ git clone https://github.com/tryingtolearn11/watcher.git
