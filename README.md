@@ -31,13 +31,11 @@ $ source venv/bin/activate
 
 ```
 (venv)...~/watcher$ pip install -r requirements.txt
-
 ```
 <h4> Finally run app using </h4>
 
 ```
 (venv)...~/watcher$ flask run
-
 ```
 
 
