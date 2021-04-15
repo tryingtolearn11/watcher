@@ -38,5 +38,5 @@ $ source venv/bin/activate
 
 ```
 
-[logo]: https://github.com/tryingtolearn11/watcher/blob/main/app/static/coinwatch.png =350x250
+[logo]: https://github.com/tryingtolearn11/watcher/blob/main/app/static/coinwatch.png |350x250
 
