@@ -10,7 +10,7 @@
 
 
 <h2> Sign Up Today to start tracking coins</h2>
-<img src="#"></img>
+<img src="https://github.com/tryingtolearn11/watcher/blob/main/app/static/watchlist.png" width=700 height=300></img>
 
 <h2> Running Locally </h2>
 
