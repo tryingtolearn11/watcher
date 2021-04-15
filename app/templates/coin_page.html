@@ -1,20 +1,33 @@
 {% extends "base.html" %}
-
-
 {% block content %}
-
 
 {{ js_resources | indent(4)|safe }}
 {{ css_resources|indent(4)|safe }}
 {{ plot_script|indent(4)|safe }}
 
-
-<div align="center">
-<h1>
-    <img src="{{coin_page.image}}" alt="" border=3 width=50 height=50></img> {{ coin_page.name }}
-</h1>
-{{ plot_div|indent(4)|safe }}</div>
-<span class="text-center">Rank # {{coin_page.market_cap_rank}}</span>
-<p>Current Price {{coin_page.current_price | currency_format()}}
+<body>
+    <div id="graph" align="center">
+        <div id="plot">
+            <div class="jumbotron jumbotron-fluid"
+                        style="margin-bottom:0;background-color: transparent;">
+                <div class="container">
+                    <h1>
+                        <img src="{{coin_page.image}}" alt="" border=3 width=50 height=50></img> {{ coin_page.name }}
+                    </h1>
+                    {{ plot_div|indent(4)|safe }}</div>
+                </div>
+            </div>
+        </div>
+        <div id="coininfo" align="center">
+            <div class="jumbotron jumbotron-fluid"
+                        style="margin-bottom:0;background-color: transparent;">
+                <div class="container">
+                    <h4>Rank # {{coin_page.market_cap_rank}}</h4>
+                    <h4>Current Price {{coin_page.current_price | currency_format()}}</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
 {% endblock %}
 

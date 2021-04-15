@@ -304,7 +304,6 @@ def follow(coin_id, action):
 
 
 @app.route('/coins/<int:coin_id>')
-# @cache.cached(timeout=300)
 def coin_page(coin_id):
     coin_page = Coin.query.filter_by(id=coin_id).first_or_404()
     coin_id = coin_page.coin_id

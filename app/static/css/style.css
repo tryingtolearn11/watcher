@@ -103,8 +103,9 @@
     font-size:  20px;
 }
 
-
-
+div#graph .jumbotron-fluid {
+    background-color: transparent !important;
+}
 
 
 
