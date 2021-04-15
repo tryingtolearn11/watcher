@@ -2,21 +2,28 @@
 
 
 <div>
-<h3>TODO:</h3>
-<li><s>USER REGISTRATION</s></li>
-<li><s>FINISH LOGIN BACKEND</s></li>
-<li><s>Fix Ranking Bug</s></li>
-<li><s>Paginate Ranking Board</s></li>
-<li><s>Personalize App: Users can track specific coins</s></li>
-<li><s>ADD GRAPHS</s></li>
-<li><s>Sort the times and prices out in lists</s></li>
-<li><s>Create test graph for each coin clicked on</s></li>
-<li><s>Now Push data to db</s></li>
-<li><s>Connect db historical data to Coin page</s></li>
-<li><s>Create intervals for historical data requests</s></li>
-<li><s>Display graph charts</s><li>
-<li>Implement Cache for optimizing </li>
-<li>Clean up graph</li>
-<li>ADD RSS NEWS FEED</li>
-<li>ADD SEARCH BAR FOR COINS</li>
+<h2> CoinWatch is your guide to aid you in tracking Cryptocurrencies"</h2>
+
+
+
+<h3> Running Locally </h3>
+```
+$ git clone https://github.com/tryingtolearn11/watcher.git
+$ cd watcher
+```
+<h4> Create a virtual env from Python3 </h4>
+```
+$ python3 -m venv venv
+$ source venv/bin/activate
+(venv) $ _
+```
+<h4> install requirements.txt </h4>
+```
+(venv)...~/watcher$ pip install -r requirements.txt
+```
+<h4> Finally run app using </h4>
+```
+(venv)...~/watcher$ flask run
+```
+
 </div>
