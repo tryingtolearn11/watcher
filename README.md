@@ -1,7 +1,7 @@
 # watcher
 
 
-<div>
+
 <h2> CoinWatch is your guide to aid you in tracking Cryptocurrencies"</h2>
 
 
@@ -26,4 +26,4 @@ $ source venv/bin/activate
 (venv)...~/watcher$ flask run
 ```
 
-</div>
+
