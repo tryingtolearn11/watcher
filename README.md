@@ -1,4 +1,4 @@
-<img src="https://github.com/tryingtolearn11/watcher/blob/main/app/static/eyewatch3.png" width=40 height=25> Watcher
+<img src="https://github.com/tryingtolearn11/watcher/blob/main/app/static/eyewatch3.png" width=40 height=25> <h1>Watcher</h1>
 
 
 
