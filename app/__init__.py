@@ -47,6 +47,38 @@ with app.app_context():
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Filters
 def currency_format(price):
     return "${:,.2f}".format(price)
