@@ -9,4 +9,3 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SCHEDULER_API_ENABLED = True
     CACHE_TYPE = 'simple' 
-    LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')

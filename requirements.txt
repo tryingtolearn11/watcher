@@ -28,6 +28,7 @@ Pillow==8.1.2
 pipreqs==0.4.10
 pycoingecko==1.4.0
 pyparsing==2.4.7
+psycopg2
 python-dateutil==2.8.1
 python-dotenv==0.15.0
 python-editor==1.0.4

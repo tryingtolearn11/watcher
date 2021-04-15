@@ -1,3 +1,3 @@
-web: gunicorn app:watcher
+web: gunicorn app:app
 
 
