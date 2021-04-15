@@ -2,7 +2,7 @@
 
 
 
-<h1> Coinwatch is your guide to aid you in tracking Cryptocurrencies"</h1>
+<h1> Coinwatch is your guide to aid you in tracking Cryptocurrencies</h1>
 
 
 
