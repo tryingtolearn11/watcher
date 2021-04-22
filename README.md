@@ -3,7 +3,7 @@
 
 
 <h1> Coinwatch is your aid in tracking Cryptocurrencies</h1>
-(https://coinwatcher.herokuapp.com/)
+https://coinwatcher.herokuapp.com/
 
 <h3>Coinwatch provides a live market tracker that shows the price changes, market cap, graphs in up to 7 day intervals. Simply hover over to your desired coin to find out more from our graphs</h3>
 
