@@ -42,8 +42,6 @@ $ source venv/bin/activate
 (venv)...~/watcher$ flask run
 ```
 <h4> TODO: </h4>
- Search Bar  
- Caching  
- Frontend  
-
+<br>Search Bar</br>
+<br>Caching</br>
 
