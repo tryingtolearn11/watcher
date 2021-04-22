@@ -40,8 +40,8 @@ $ source venv/bin/activate
 ```
 
 <h4> TODO: </h4>
-<li>Search Bar</li>
-<li>Caching</li>
-<li>Frontend</li>
+<li> Search Bar</li>
+<li> Caching</li>
+<li> Frontend</li>
 
 
