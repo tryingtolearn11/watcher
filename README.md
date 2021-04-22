@@ -5,6 +5,9 @@
 <h1> Coinwatch is your aid in tracking Cryptocurrencies</h1>
 https://coinwatcher.herokuapp.com/
 
+
+
+
 <h3>Coinwatch provides a live market tracker that shows the price changes, market cap, graphs in up to 7 day intervals. Simply hover over to your desired coin to find out more from our graphs</h3>
 
 <img src="https://github.com/tryingtolearn11/watcher/blob/main/app/static/coinwatch.png" width=950 height=400></img>
@@ -38,7 +41,6 @@ $ source venv/bin/activate
 ```
 (venv)...~/watcher$ flask run
 ```
-
 <h4> TODO: </h4>
 <li> Search Bar</li>
 <li> Caching</li>
