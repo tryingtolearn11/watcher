@@ -77,7 +77,7 @@ def currency_format(price):
     return "${:,.2f}".format(price)
 
 def number_format(number):
-    return "{:,}".format(number)
+    return "{:,}".format(int(number))
 
 def percent_color_format(value):
     s = str(value)
