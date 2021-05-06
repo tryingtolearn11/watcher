@@ -38,8 +38,6 @@ db = SQLAlchemy(metadata=MetaData(naming_convention=naming_convention))
 scheduler.init_app(app)
 scheduler.start()
 
-with app.app_context():
-    db.create_all()
 
 
 
