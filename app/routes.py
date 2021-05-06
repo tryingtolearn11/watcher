@@ -23,42 +23,48 @@ cg = CoinGeckoAPI()
 @scheduler.task('interval', id='do_job_1', seconds=300)
 def job1():
     with scheduler.app.app_context():
-        print("INTERVAL JOB 1 DONE")
-        # Get a request from api
-        data = cg.get_coins_markets(vs_currency='usd', order='market_cap_desc',
-                                    per_page=250,
-                                    price_change_percentage='24h,7d')
+        try {
+            print("INTERVAL JOB 1 DONE")
+            # Get a request from api
+            data = cg.get_coins_markets(vs_currency='usd', order='market_cap_desc',
+                                        per_page=250,
+                                        price_change_percentage='24h,7d')
 
 
 
-        # Much better request handling
-        for i in range(len(data)):
-            new_coin = Coin.query.filter_by(name=data[i].get('name')).first()
-            
-            # If coin is new, add to db
-            if new_coin is None:
-                new_coin = Coin(name=data[i].get('name'), coin_id=data[i].get('id'),symbol=data[i].get('symbol'),
-                                current_price=data[i].get('current_price'),
-                                market_cap_rank=data[i].get('market_cap_rank'),
-                                market_cap=data[i].get('market_cap'),
-                                price_change_24h=data[i].get('price_change_percentage_24h'),
-                                price_change_7d=data[i].get('price_change_percentage_7d_in_currency'),
-                                image=data[i].get('image'))
+            # Much better request handling
+            for i in range(len(data)):
+                new_coin = Coin.query.filter_by(name=data[i].get('name')).first()
+                
+                # If coin is new, add to db
+                if new_coin is None:
+                    new_coin = Coin(name=data[i].get('name'), coin_id=data[i].get('id'),symbol=data[i].get('symbol'),
+                                    current_price=data[i].get('current_price'),
+                                    market_cap_rank=data[i].get('market_cap_rank'),
+                                    market_cap=data[i].get('market_cap'),
+                                    price_change_24h=data[i].get('price_change_percentage_24h'),
+                                    price_change_7d=data[i].get('price_change_percentage_7d_in_currency'),
+                                    image=data[i].get('image'))
 
-                print("Added : ", new_coin)
-                print("{}".format(new_coin.coin_id))
-                db.session.add(new_coin)
-                db.session.commit()
+                    print("Added : ", new_coin)
+                    print("{}".format(new_coin.coin_id))
+                    db.session.add(new_coin)
+                    db.session.commit()
 
-            else:
+                else:
 
-                # Otherwise update the numbers for coins
-                setattr(new_coin, 'current_price', data[i].get('current_price')) 
-                setattr(new_coin, 'market_cap_rank',data[i].get('market_cap_rank')) 
-                setattr(new_coin, 'market_cap', data[i].get('market_cap'))
-                setattr(new_coin, 'price_change_24h',data[i].get('price_change_percentage_24h'))
-                setattr(new_coin,'price_change_7d',data[i].get('price_change_percentage_7d_in_currency'))
-                db.session.commit()     
+                    # Otherwise update the numbers for coins
+                    setattr(new_coin, 'current_price', data[i].get('current_price')) 
+                    setattr(new_coin, 'market_cap_rank',data[i].get('market_cap_rank')) 
+                    setattr(new_coin, 'market_cap', data[i].get('market_cap'))
+                    setattr(new_coin, 'price_change_24h',data[i].get('price_change_percentage_24h'))
+                    setattr(new_coin,'price_change_7d',data[i].get('price_change_percentage_7d_in_currency'))
+                    db.session.commit()
+        }
+        except Exception as e:
+            db.session.rollback()
+            db.session.flush()
+            failed=True
 
 
 
