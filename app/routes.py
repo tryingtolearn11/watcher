@@ -23,7 +23,7 @@ cg = CoinGeckoAPI()
 @scheduler.task('interval', id='do_job_1', seconds=300)
 def job1():
     with scheduler.app.app_context():
-        try {
+        try:
             print("INTERVAL JOB 1 DONE")
             # Get a request from api
             data = cg.get_coins_markets(vs_currency='usd', order='market_cap_desc',
@@ -60,7 +60,7 @@ def job1():
                     setattr(new_coin, 'price_change_24h',data[i].get('price_change_percentage_24h'))
                     setattr(new_coin,'price_change_7d',data[i].get('price_change_percentage_7d_in_currency'))
                     db.session.commit()
-        }
+        
         except Exception as e:
             db.session.rollback()
             db.session.flush()
