@@ -1,2 +1,2 @@
-web:gunicorn app:watcher.py
+web:gunicorn app:app
 
