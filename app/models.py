@@ -60,11 +60,11 @@ class Coin(db.Model):
     name = db.Column(db.String(64))
     symbol = db.Column(db.String(32))
     current_price = db.Column(db.Float)
-    market_cap = db.Column(db.String(180))
+    market_cap = db.Column(db.String(255))
     market_cap_rank = db.Column(db.Integer)
     price_change_24h = db.Column(db.Float)
     price_change_7d = db.Column(db.Float)
-    image = db.Column(db.String(180))
+    image = db.Column(db.String(255))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     data = db.relationship('Point', backref='parent', lazy='dynamic')
     
