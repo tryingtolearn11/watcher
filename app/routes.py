@@ -116,6 +116,7 @@ def job2():
 
                 
 # Clean DB
+# TODO: SCHEDULE A PROPER DB CLEANUP 
 @scheduler.task('interval', id='do_job_3', seconds=30)
 def job3():
     with scheduler.app.app_context():
