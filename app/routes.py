@@ -115,7 +115,17 @@ def job2():
 
 
                 
-
+# Clean DB
+@scheduler.task('interval', id='do_job_3', seconds=30)
+def job3():
+    with scheduler.app.app_context():
+        print("INTERVAL JOB 3 DONE")
+        coins = Coin.query.all()
+        for old in coins: 
+            if old.market_cap_rank >= 249:
+                print("deleted {}".format(old.coin_id))
+                db.session.delete(old)
+                db.session.commit()
 
 
 
