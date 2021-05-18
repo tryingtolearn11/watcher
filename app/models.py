@@ -52,7 +52,6 @@ def load_user(id):
     return User.query.get(int(id))
 
 
-# TODO: Create the db table for coin historical data
 # Coin Database Model
 class Coin(db.Model):
     id = db.Column(db.Integer, primary_key=True)

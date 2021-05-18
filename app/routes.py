@@ -69,7 +69,7 @@ def job1():
 
 
 # Queries for historical data per coin
-@scheduler.task('interval', id='do_job_2', seconds=1400)
+@scheduler.task('interval', id='do_job_2', seconds=300)
 def job2():
     with scheduler.app.app_context():
         # Get data from our db
@@ -117,16 +117,18 @@ def job2():
                 
 # Clean DB
 # TODO: SCHEDULE A PROPER DB CLEANUP 
-@scheduler.task('interval', id='do_job_3', seconds=30)
+@scheduler.task('interval', id='do_job_3', seconds=2000)
 def job3():
     with scheduler.app.app_context():
         print("INTERVAL JOB 3 DONE")
-        coins = Coin.query.all()
-        for old in coins: 
-            if old.market_cap_rank >= 249:
-                print("deleted {}".format(old.coin_id))
-                db.session.delete(old)
-                db.session.commit()
+        # Sort by oldest to newest
+        coins = Coin.query.order_by(Coin.timestamp.desc()).all()
+        # Delete only a portion of the oldest coins
+        for k in range((len(coins)/6)):
+            print("deleted {}".format(coin[k].id))
+            db.session.delete(coin[k].id)
+        db.session.commit()
+
 
 
 
@@ -229,7 +231,6 @@ def plot(coins):
         p.outline_line_color= None
 
 
-
         # Key = Name of Coin and Value  = plot 
         plots[coins[i].name] = p
 
@@ -271,7 +272,6 @@ def profile():
         css_resources=css_resources)
 
 
-# TODO: Fix bug when cached -cannot go to other pages
 # MIGHT HAVE TO CACHE ON THE HTML FILE INSTEAD OF HERE
 @app.route('/coins')
 # @cache.cached(timeout=300)
@@ -298,7 +298,6 @@ def coins():
         js_resources=js_resources,
         css_resources=css_resources)
 
-   
 
 # Follow coins/ unfollow
 @app.route('/follow/<int:coin_id>/<action>')
