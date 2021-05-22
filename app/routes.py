@@ -126,8 +126,8 @@ def job3():
         print("INTERVAL JOB 3 DONE")
         # Sort by oldest to newest
         coins = Coin.query.order_by(Coin.timestamp.desc()).all()
-        # Delete only a portion of the oldest coins
-        for k in range((len(coins)/6)):
+        # Delete ~half for now
+        for k in range((len(coins)/2)):
             print("deleted {}".format(coin[k].id))
             db.session.delete(coin[k].id)
         db.session.commit()
