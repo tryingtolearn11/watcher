@@ -24,7 +24,8 @@ migrate = Migrate(app, db, render_as_batch=True)
 bootstrap = Bootstrap(app)
 cache = Cache(app)
 
-
+with app.app_context():
+    db.create_all()
 
 naming_convention = {
         "ix": 'ix_%(column_0_label)s',
