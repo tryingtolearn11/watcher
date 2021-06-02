@@ -124,7 +124,7 @@ def job3():
         # Sort by oldest to newest
         coins = Coin.query.order_by(Coin.timestamp.desc()).all()
         # Delete ~half for now
-        for k in range((len(coins)/2)):
+        for k in range((len(coins))):
             print("deleted {}".format(coin[k].id))
             db.session.delete(coin[k].id)
         db.session.commit()
