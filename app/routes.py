@@ -126,7 +126,7 @@ def job3():
         # Delete ~half for now
         for k in range((len(coins))):
             print("deleted {}".format(coin[k].id))
-            db.session.delete(coin[k].id)
+            db.session.delete(coin[k])
         db.session.commit()
 
 
