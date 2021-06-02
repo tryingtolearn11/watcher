@@ -166,21 +166,16 @@ def logout():
 
 @app.route('/register', methods=['GET','POST'])
 def register():
-    try:
-        if current_user.is_authenticated:
-            return redirect(url_for('index'))
-        form = RegistrationForm()
-        if form.validate_on_submit():
-            user = User(username=form.username.data, email=form.email.data)
-            user.set_password(form.password.data)
-            db.session.add(user)
-            db.session.commit()
-            flash('Congrats, you have registered')
-            return redirect(url_for('login'))
-
-    except Exception as e:
-        db.session.rollback()
-
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Congrats, you have registered')
+        return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
 
