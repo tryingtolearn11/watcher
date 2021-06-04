@@ -77,7 +77,7 @@ def job2():
         coins = list
         # keep track at index of coin
         count = 0
-        for coin in coins:
+        for coin in coins[0:100]:
             print(coin.name)
             # Get data from request
             historical_data = cg.get_coin_market_chart_by_id(id=coin.coin_id,
@@ -125,7 +125,10 @@ def job3():
         coins = Coin.query.order_by(Coin.timestamp.desc()).all()
         # Delete ~half for now
         for k in range((len(coins))):
-            print("deleted {}".format(coin[k].id))
+            # print("deleted {}".format(coin[k].id))
+            data = coin[k].data.all()
+            for p in data:
+                db.session.delete(p)
             db.session.delete(coin[k])
         db.session.commit()
 
