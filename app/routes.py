@@ -20,7 +20,7 @@ cg = CoinGeckoAPI()
 
 
 # QUERIES AT EVERY INTERVAL
-@scheduler.task('interval', id='do_job_1', seconds=1200)
+@scheduler.task('interval', id='do_job_1', seconds=1500)
 def job1():
     with scheduler.app.app_context():
         try:
@@ -69,7 +69,7 @@ def job1():
 
 
 # Queries for historical data per coin
-@scheduler.task('interval', id='do_job_2', seconds=1500)
+@scheduler.task('interval', id='do_job_2', seconds=4000)
 def job2():
     with scheduler.app.app_context():
         # Get data from our db
@@ -109,7 +109,7 @@ def job2():
             print('{} data was added'.format(coin.name))
             print("Coin # : ", count)
             print("NOW SLEEPING")
-            time.sleep(2)
+            time.sleep(3)
 
         print("JOB2 All done :) ")
 
@@ -117,13 +117,12 @@ def job2():
                 
 # Clean DB
 # TODO: SCHEDULE A PROPER DB CLEANUP 
-@scheduler.task('interval', id='do_job_3', seconds=4000)
+@scheduler.task('interval', id='do_job_3', seconds=72000)
 def job3():
     with scheduler.app.app_context():
         print("INTERVAL JOB 3 DONE")
         # Sort by oldest to newest
         coins = Coin.query.order_by(Coin.timestamp.desc()).all()
-        # Delete ~half for now
         for k in range((len(coins))):
             # print("deleted {}".format(coin[k].id))
             data = coin[k].data.all()
