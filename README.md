@@ -43,7 +43,7 @@ $ source venv/bin/activate
 ```
 
 
-<h2> Down For Maintainence </h2>
+<h2> Down For Maintainance </h2>
 <h4> TODO: </h4>
 <br>Search Bar</br>
 <br>Caching</br>
